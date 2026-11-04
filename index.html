@@ -6,6 +6,21 @@
     <meta name="color-scheme" content="light dark" />
     <link rel="icon" href="data:," />
     <title>PDF Editor</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <!-- Die Webschrift wird nicht render-blockierend geladen: Als einzelne
+         lokale Datei ohne Internet darf ein hängendes Stylesheet sonst den
+         ersten sichtbaren Inhalt (bis hin zum schwarzen Bildschirm auf
+         langsamen Geräten) blockieren. Ohne Netz greift einfach die
+         Systemschrift aus dem CSS-Fallback. -->
+    <link id="fontCss" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet" media="print" />
+    <script>
+      (function () {
+        var l = document.getElementById("fontCss");
+        function go() { l.media = "all"; }
+        if (l.sheet) go(); else l.addEventListener("load", go);
+      })();
+    </script>
     <style>
       :root {
         --bg: #eceef0;
@@ -178,14 +193,25 @@
       }
       .card:hover { border-color: var(--line-strong); }
       .card.selected { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent), var(--shadow); }
-      .card.dragging { opacity: .35; }
-      .card.drop-before { box-shadow: -4px 0 0 0 var(--accent); }
-      .card.drop-after { box-shadow: 4px 0 0 0 var(--accent); }
+      .card { -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; }
+      .card.pressing { transform: scale(.97); border-color: var(--accent); }
+      .card.drag-float {
+        position: fixed; z-index: 300; margin: 0; pointer-events: none;
+        border-color: var(--accent);
+        box-shadow: var(--shadow-lg);
+        transition: none; will-change: transform;
+      }
+      .card-placeholder {
+        border: 2px dashed var(--accent); border-radius: var(--radius);
+        background: var(--accent-soft);
+      }
+      .grid.is-dragging .card:not(.drag-float) { pointer-events: none; }
 
       .thumb {
         position: relative; background: var(--surface-2);
         aspect-ratio: 1 / 1.18; display: grid; place-items: center;
         overflow: hidden; cursor: pointer; border-bottom: 1px solid var(--line);
+        touch-action: pan-y;
       }
       .thumb canvas { max-width: 92%; max-height: 92%; box-shadow: 0 1px 6px rgba(0,0,0,.18); background: #fff; display: block; }
       .thumb .blankpage {
@@ -240,7 +266,7 @@
       .cbtn:hover { background: var(--surface-2); color: var(--ink); }
       .cbtn.del:hover { background: var(--accent-soft); color: var(--accent); }
       .cbtn svg { width: 16px; height: 16px; }
-      .cbtn.grip { cursor: grab; flex: none; width: 26px; color: var(--ink-3); }
+      .cbtn.grip { cursor: grab; flex: none; width: 26px; color: var(--ink-3); touch-action: none; }
       .cbtn.grip:active { cursor: grabbing; }
 
       /* ---------- Empty state / dropzone ---------- */
@@ -454,7 +480,7 @@
       <span class="stat"><b id="statPages">0</b>&nbsp;Seiten</span>
       <span class="stat sel" id="statSelWrap" hidden><b id="statSel">0</b>&nbsp;ausgewählt</span>
       <span class="stat"><span class="engdot load" data-engdot></span><span data-engtext>C++-Engine lädt …</span></span>
-      <span class="hintline">Seiten per Ziehen am Griff sortieren · Klick auf eine Seite wählt sie aus</span>
+      <span class="hintline">Seite gedrückt halten &amp; ziehen zum Sortieren · Tippen wählt eine Seite aus</span>
     </div>
 
     <div class="filebar" id="filebar">
@@ -491,7 +517,7 @@
           <div class="feat">
             <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 9l-3 3 3 3"/><path d="M9 5l3-3 3 3"/><path d="M15 19l-3 3-3-3"/><path d="M19 9l3 3-3 3"/><path d="M2 12h20"/><path d="M12 2v20"/></svg></div>
             <h3>Reihenfolge ändern</h3>
-            <p>Seiten per Ziehen oder mit den Pfeil-Buttons an die richtige Stelle schieben – die Nummerierung passt sich sofort an.</p>
+            <p>Seite einfach gedrückt halten, bis sie sich abhebt, dann mit Finger oder Maus an die richtige Stelle ziehen – oder die Pfeil-Buttons nutzen. Die Nummerierung passt sich sofort an.</p>
           </div>
         </div>
 
@@ -508,7 +534,7 @@
           <h2>So geht es</h2>
           <ol>
             <li><b>PDFs laden:</b> Dateien in das Feld oben ziehen oder über den Button auswählen.</li>
-            <li><b>Seiten bearbeiten:</b> Seiten anklicken zum Auswählen, dann löschen, drehen oder verschieben.</li>
+            <li><b>Seiten bearbeiten:</b> Seite antippen zum Auswählen, dann löschen oder drehen. Zum Verschieben die Seite gedrückt halten, bis sie sich abhebt, und an die neue Stelle ziehen.</li>
             <li><b>Prüfen:</b> Die große Zahl auf jeder Seite zeigt die neue Reihenfolge im fertigen PDF.</li>
             <li><b>Speichern:</b> Oben auf „PDF herunterladen“ tippen. Danach erscheint unten eine Karte: Dort auf „Datei speichern“ tippen und „In Dateien sichern“ wählen – oder die Datei direkt herunterladen.</li>
             <li><b>Am PC offline nutzen:</b> Alles steckt in einer einzigen Datei. Datei auf den PC kopieren und per Doppelklick in Chrome oder Edge öffnen – kein Internet, keine Installation, alle Funktionen laufen offline.</li>
@@ -627,10 +653,10 @@ function(moduleArg = {}) {
 
 var f=moduleArg,aa,ba,ca=new Promise((a,b)=>{aa=a;ba=b}),da="object"==typeof window,ea="undefined"!=typeof WorkerGlobalScope,fa="object"==typeof process&&"object"==typeof process.versions&&"string"==typeof process.versions.node&&"renderer"!=process.type;f.noInitialRun=!0;var ha=Object.assign({},f),ia=[],ja="./this.program",ka=(a,b)=>{throw b;},p="",la,ma;
 if(fa){var fs=require("fs");require("path");p=__dirname+"/";ma=a=>{a=na(a)?new URL(a):a;return fs.readFileSync(a)};la=async a=>{a=na(a)?new URL(a):a;return fs.readFileSync(a,void 0)};!f.thisProgram&&1<process.argv.length&&(ja=process.argv[1].replace(/\\/g,"/"));ia=process.argv.slice(2);ka=(a,b)=>{process.exitCode=a;throw b;}}else if(da||ea)ea?p=(self.document&&self.document.baseURI)||"":"undefined"!=typeof document&&document.currentScript&&(p=document.currentScript.src),_scriptName&&(p=_scriptName),p.startsWith("blob:")?
-p="":p=p.substr(0,p.replace(/[?#].*/,"").lastIndexOf("/")+1),ea&&(ma=a=>{var b=new XMLHttpRequest;b.open("GET",a,!1);b.responseType="arraybuffer";b.send(null);return new Uint8Array(b.response)}),la=async a=>{if(typeof window!="undefined"&&window.__QPDF_WASM_B64__){var _b64=window.__QPDF_WASM_B64__,_bin=atob(_b64),_by=new Uint8Array(_bin.length);for(var _i=0;_i<_bin.length;_i++)_by[_i]=_bin.charCodeAt(_i);return _by.buffer;}if(na(a))return new Promise((c,d)=>{var e=new XMLHttpRequest;e.open("GET",a,!0);e.responseType="arraybuffer";e.onload=()=>{200==e.status||0==e.status&&e.response?c(e.response):d(e.status)};e.onerror=d;e.send(null)});var b=await fetch(a,{credentials:"same-origin"});if(b.ok)return b.arrayBuffer();
+p="":p=p.substr(0,p.replace(/[?#].*/,"").lastIndexOf("/")+1),ea&&(ma=a=>{var b=new XMLHttpRequest;b.open("GET",a,!1);b.responseType="arraybuffer";b.send(null);return new Uint8Array(b.response)}),la=async a=>{if(na(a))return new Promise((c,d)=>{var e=new XMLHttpRequest;e.open("GET",a,!0);e.responseType="arraybuffer";e.onload=()=>{200==e.status||0==e.status&&e.response?c(e.response):d(e.status)};e.onerror=d;e.send(null)});var b=await fetch(a,{credentials:"same-origin"});if(b.ok)return b.arrayBuffer();
 throw Error(b.status+" : "+b.url);};var oa=console.log.bind(console),r=console.error.bind(console);Object.assign(f,ha);ha=null;var pa,qa=!1,ra,u,w,sa,x,y,z;function ta(){var a=pa.buffer;f.HEAP8=u=new Int8Array(a);f.HEAP16=sa=new Int16Array(a);f.HEAPU8=w=new Uint8Array(a);f.HEAPU16=new Uint16Array(a);f.HEAP32=x=new Int32Array(a);f.HEAPU32=y=new Uint32Array(a);f.HEAPF32=new Float32Array(a);f.HEAPF64=new Float64Array(a);f.HEAP64=z=new BigInt64Array(a);f.HEAPU64=new BigUint64Array(a)}
 var ua=[],va=[],wa=[],xa=[],ya=0,za=null;function Aa(){ya--;if(0==ya&&za){var a=za;za=null;a()}}function A(a){a="Aborted("+a+")";r(a);qa=!0;a=new WebAssembly.RuntimeError(a+". Build with -sASSERTIONS for more info.");ba(a);throw a;}var Ba=a=>a.startsWith("data:application/octet-stream;base64,"),na=a=>a.startsWith("file://"),Ca;async function Da(a){try{var b=await la(a);return new Uint8Array(b)}catch{}if(ma)a=ma(a);else throw"both async and sync fetching of the wasm failed";return a}
-async function Ea(a,b){try{var c=await Da(a);return await WebAssembly.instantiate(c,b)}catch(d){r(`failed to asynchronously prepare wasm: ${d}`),A(d)}}async function Fa(a){return Ea(Ca,a)}
+async function Ea(a,b){try{var c=await Da(a);return await WebAssembly.instantiate(c,b)}catch(d){r(`failed to asynchronously prepare wasm: ${d}`),A(d)}}async function Fa(a){var b=Ca;if(!("function"!=typeof WebAssembly.instantiateStreaming||Ba(b)||na(b)||fa)&&"function"==typeof fetch)try{var c=fetch(b,{credentials:"same-origin"});return await WebAssembly.instantiateStreaming(c,a)}catch(d){r(`wasm streaming compile failed: ${d}`),r("falling back to ArrayBuffer instantiation")}return Ea(b,a)}
 class Ga{name="ExitStatus";constructor(a){this.message=`Program terminated with exit(${a})`;this.status=a}}
 var Ha=a=>{for(;0<a.length;)a.shift()(f)},Ia="undefined"!=typeof TextDecoder?new TextDecoder:void 0,B=(a,b=0)=>{for(var c=b+NaN,d=b;a[d]&&!(d>=c);)++d;if(16<d-b&&a.buffer&&Ia)return Ia.decode(a.subarray(b,d));for(c="";b<d;){var e=a[b++];if(e&128){var g=a[b++]&63;if(192==(e&224))c+=String.fromCharCode((e&31)<<6|g);else{var h=a[b++]&63;e=224==(e&240)?(e&15)<<12|g<<6|h:(e&7)<<18|g<<12|h<<6|a[b++]&63;65536>e?c+=String.fromCharCode(e):(e-=65536,c+=String.fromCharCode(55296|e>>10,56320|e&1023))}}else c+=
 String.fromCharCode(e)}return c},Ja=[],Ka=0,D=0;class La{constructor(a){this.nb=a;this.wa=a-24}Pa(a,b){y[this.wa+16>>2]=0;y[this.wa+4>>2]=a;y[this.wa+8>>2]=b}}
@@ -838,7 +864,7 @@ window.__QPDF_WASM_B64__ =
           engineState = state;
           var dotCls = state === "ready" ? "engdot ok" : (state === "fallback" ? "engdot fb" : "engdot load");
           var txt = state === "ready" ? "C++-Engine bereit (QPDF · WebAssembly)"
-            : state === "fallback" ? "C++ lädt nicht – Reserve-Engine läuft"
+            : state === "fallback" ? "Reserve-Engine aktiv"
             : "C++-Engine lädt …";
           document.querySelectorAll("[data-engdot]").forEach(function (d) { d.className = dotCls; });
           document.querySelectorAll("[data-engtext]").forEach(function (t) { t.textContent = txt; });
@@ -878,10 +904,8 @@ window.__QPDF_WASM_B64__ =
 
         var engineProbe = null;
         if (qpdfFactory) {
-          var _qp = newQpdf();
-          _qp.catch(function () {});
-          engineProbe = Promise.race([_qp, new Promise(function (res) { setTimeout(function () { res(null); }, 8000); })]).then(
-            function (mod) { if (mod) { setEngine("ready"); return true; } setEngine("fallback"); return false; },
+          engineProbe = newQpdf().then(
+            function () { setEngine("ready"); return true; },
             function () { setEngine("fallback"); return false; }
           );
         } else {
@@ -1155,7 +1179,7 @@ window.__QPDF_WASM_B64__ =
           }
           var grip = document.createElement("span");
           grip.className = "cbtn grip"; grip.innerHTML = ICONS.grip;
-          grip.title = "Ziehen zum Sortieren";
+          grip.title = "Ziehen zum Sortieren (oder Seite gedrückt halten)";
           act.appendChild(grip);
           act.appendChild(mkBtn(ICONS.left, "Nach vorne", "", function () { movePage(pg.id, -1); }));
           act.appendChild(mkBtn(ICONS.right, "Nach hinten", "", function () { movePage(pg.id, 1); }));
@@ -1164,7 +1188,10 @@ window.__QPDF_WASM_B64__ =
           act.appendChild(mkBtn(ICONS.trash, "Seite löschen", "del", function () { deletePages([pg.id]); }));
           card.appendChild(act);
 
-          thumb.addEventListener("click", function () { toggleSelect(pg.id); });
+          thumb.addEventListener("click", function () {
+            if (Date.now() < suppressClickUntil) return;
+            toggleSelect(pg.id);
+          });
           pick.addEventListener("click", function (e) { e.stopPropagation(); toggleSelect(pg.id); });
 
           setupDrag(card, grip, pg);
@@ -1217,38 +1244,168 @@ window.__QPDF_WASM_B64__ =
 
         function cardEl(id) { return els.grid.querySelector('.card[data-id="' + id + '"]'); }
 
-        /* ---------------- Drag & drop reorder ---------------- */
-        var dragId = null;
+        /* ---------------- Sortieren: gedrückt halten & ziehen ----------------
+           HTML5-Drag-&-Drop kennt keine Touch-Gesten – auf dem Handy tat
+           sich damit gar nichts. Darum läuft das Sortieren jetzt über
+           Pointer Events: Seite (Vorschau oder Griff) gedrückt halten,
+           bis sie sich abhebt, dann mit Finger oder Maus an die neue
+           Stelle ziehen und loslassen. Ein kurzes Tippen bleibt die
+           Auswahl, ein Wischen bleibt das Scrollen: Erst wenn der Finger
+           ruhig liegen bleibt, startet der Zieh-Modus. Am Griff startet
+           das Ziehen sofort bei Bewegung, ganz ohne Halten. */
+        var pressState = null;
+        var dragState = null;
+        var suppressClickUntil = 0;
+
         function setupDrag(card, grip, pg) {
-          card.draggable = false;
-          grip.addEventListener("mousedown", function () { card.draggable = true; });
-          grip.addEventListener("touchstart", function () { card.draggable = true; }, { passive: true });
-          card.addEventListener("dragstart", function (e) {
-            dragId = pg.id;
-            card.classList.add("dragging");
-            e.dataTransfer.effectAllowed = "move";
-            try { e.dataTransfer.setData("text/plain", String(pg.id)); } catch (err) {}
+          var thumb = card.querySelector(".thumb");
+          thumb.addEventListener("pointerdown", function (e) { startPress(e, card, pg, false); });
+          grip.addEventListener("pointerdown", function (e) { startPress(e, card, pg, true); });
+          card.addEventListener("dragstart", function (e) { e.preventDefault(); });
+          card.addEventListener("contextmenu", function (e) {
+            if (pressState || dragState) e.preventDefault();
           });
-          card.addEventListener("dragend", function () {
-            card.draggable = false;
-            card.classList.remove("dragging");
-            els.grid.querySelectorAll(".card").forEach(function (c) { c.classList.remove("drop-before", "drop-after"); });
-            syncOrderFromDom();
-            dragId = null;
-          });
-          card.addEventListener("dragover", function (e) {
-            if (dragId === null || dragId === pg.id) return;
-            e.preventDefault();
-            e.dataTransfer.dropEffect = "move";
-            var r = card.getBoundingClientRect();
-            var after = (e.clientX - r.left) > r.width / 2;
-            els.grid.querySelectorAll(".card").forEach(function (c) { c.classList.remove("drop-before", "drop-after"); });
-            card.classList.add(after ? "drop-after" : "drop-before");
-            var dragEl = cardEl(dragId);
-            if (dragEl && dragEl !== card) {
-              if (after) card.after(dragEl); else card.before(dragEl);
+        }
+
+        function startPress(e, card, pg, fromGrip) {
+          if (dragState || pressState) return;
+          if (e.button !== undefined && e.button > 0) return;
+          if (e.target && e.target.closest && e.target.closest("button")) return;
+          var ps = { card: card, pg: pg, fromGrip: fromGrip, startX: e.clientX, startY: e.clientY, timer: null };
+          pressState = ps;
+          card.classList.add("pressing");
+          function detach() {
+            document.removeEventListener("pointermove", onMove, true);
+            document.removeEventListener("pointerup", cancel, true);
+            document.removeEventListener("pointercancel", cancel, true);
+          }
+          function cancel() {
+            if (pressState !== ps) return;
+            pressState = null;
+            clearTimeout(ps.timer);
+            card.classList.remove("pressing");
+            detach();
+          }
+          function onMove(ev) {
+            var dx = ev.clientX - ps.startX, dy = ev.clientY - ps.startY;
+            if (Math.sqrt(dx * dx + dy * dy) < (fromGrip ? 5 : 10)) return;
+            if (fromGrip) {
+              pressState = null;
+              clearTimeout(ps.timer);
+              detach();
+              beginDrag(ps);
+              onDragMove(ev);
+            } else {
+              /* Finger bewegt sich vor dem Halten = Scrollen, kein Ziehen. */
+              cancel();
             }
+          }
+          document.addEventListener("pointermove", onMove, true);
+          document.addEventListener("pointerup", cancel, true);
+          document.addEventListener("pointercancel", cancel, true);
+          if (!fromGrip) {
+            ps.timer = setTimeout(function () {
+              if (pressState !== ps) return;
+              pressState = null;
+              detach();
+              beginDrag(ps);
+            }, 320);
+          }
+        }
+
+        function blockScroll(e) { if (dragState) e.preventDefault(); }
+
+        function beginDrag(ps) {
+          var card = ps.card;
+          var r = card.getBoundingClientRect();
+          var ds = {
+            card: card, pg: ps.pg,
+            startX: ps.startX, startY: ps.startY,
+            origNext: card.nextSibling,
+            ph: document.createElement("div")
+          };
+          ds.ph.className = "card-placeholder";
+          ds.ph.style.height = r.height + "px";
+          card.parentNode.insertBefore(ds.ph, card);
+          card.classList.remove("pressing");
+          card.classList.add("drag-float");
+          card.style.width = r.width + "px";
+          card.style.left = r.left + "px";
+          card.style.top = r.top + "px";
+          card.style.transform = "rotate(-1.2deg) scale(1.03)";
+          card.style.touchAction = "none";
+          dragState = ds;
+          els.grid.classList.add("is-dragging");
+          if (navigator.vibrate) { try { navigator.vibrate(12); } catch (err) {} }
+          document.addEventListener("pointermove", onDragMove, true);
+          document.addEventListener("pointerup", onDragUp, true);
+          document.addEventListener("pointercancel", onDragCancel, true);
+          document.addEventListener("keydown", onDragKey, true);
+          document.addEventListener("touchmove", blockScroll, { passive: false });
+        }
+
+        function onDragMove(e) {
+          var ds = dragState;
+          if (!ds) return;
+          e.preventDefault();
+          var x = e.clientX, y = e.clientY;
+          ds.card.style.transform =
+            "translate(" + (x - ds.startX) + "px," + (y - ds.startY) + "px) rotate(-1.2deg) scale(1.03)";
+          /* Am Bildschirmrand weiter scrollen, damit auch ferne
+             Positionen erreichbar sind. */
+          if (y < 76) window.scrollBy(0, -14);
+          else if (y > window.innerHeight - 76) window.scrollBy(0, 14);
+          /* Zielposition in Lese-Reihenfolge (Zeilen, dann Spalten):
+             Der Platzhalter wandert live mit, die Lücke zeigt immer,
+             wo die Seite beim Loslassen landet. */
+          var others = Array.prototype.filter.call(els.grid.children, function (c) {
+            return c !== ds.card && c !== ds.ph;
           });
+          var count = 0;
+          others.forEach(function (c) {
+            var cr = c.getBoundingClientRect();
+            var cx = cr.left + cr.width / 2, cy = cr.top + cr.height / 2;
+            if (cy < y - cr.height * 0.25 || (Math.abs(cy - y) <= cr.height * 0.5 && cx < x)) count++;
+          });
+          var target = count >= others.length ? null : others[count];
+          if (target) { if (target.previousElementSibling !== ds.ph) els.grid.insertBefore(ds.ph, target); }
+          else if (ds.ph !== els.grid.lastElementChild) els.grid.appendChild(ds.ph);
+        }
+
+        function onDragUp() { endDrag(true); }
+        function onDragCancel() { endDrag(true); }
+        function onDragKey(e) { if (e.key === "Escape") endDrag(false); }
+
+        function endDrag(commit) {
+          var ds = dragState;
+          if (!ds) return;
+          dragState = null;
+          document.removeEventListener("pointermove", onDragMove, true);
+          document.removeEventListener("pointerup", onDragUp, true);
+          document.removeEventListener("pointercancel", onDragCancel, true);
+          document.removeEventListener("keydown", onDragKey, true);
+          document.removeEventListener("touchmove", blockScroll);
+          els.grid.classList.remove("is-dragging");
+          if (!commit) {
+            /* Abgebrochen (Esc): Platzhalter zurück an die alte Stelle. */
+            if (ds.origNext && ds.origNext.parentNode === els.grid && ds.origNext !== ds.ph) {
+              els.grid.insertBefore(ds.ph, ds.origNext);
+            } else if (!ds.origNext) {
+              els.grid.appendChild(ds.ph);
+            }
+          }
+          ds.ph.parentNode.replaceChild(ds.card, ds.ph);
+          var card = ds.card;
+          card.classList.remove("drag-float");
+          card.style.width = "";
+          card.style.left = "";
+          card.style.top = "";
+          card.style.transform = "";
+          card.style.touchAction = "";
+          /* Der Klick, der direkt nach dem Loslassen durchschlägt,
+             darf die Seite nicht gleich wieder auswählen/abwählen. */
+          suppressClickUntil = Date.now() + 300;
+          if (commit) syncOrderFromDom();
         }
         function syncOrderFromDom() {
           var order = Array.prototype.map.call(els.grid.children, function (c) { return Number(c.dataset.id); });

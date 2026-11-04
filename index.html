@@ -343,6 +343,177 @@
       .howto ol { margin: 0; padding-left: 20px; color: var(--ink-2); font-size: 14px; line-height: 1.9; }
       .howto ol b { color: var(--ink); }
 
+      /* ---------- Werkzeug-Panel (Text & OCR nutzt diese Basis mit) ---------- */
+      .engine .eic.pyic { background: #3776ab; color: #ffd43b; font-size: 16px; }
+      .py-panel {
+        background: var(--surface); border: 1px solid var(--line);
+        border-radius: var(--radius); padding: 20px 22px; margin-bottom: 16px;
+        box-shadow: var(--shadow);
+      }
+      .py-head { display: flex; gap: 14px; align-items: flex-start; flex-wrap: wrap; }
+      .py-badge {
+        width: 44px; height: 44px; border-radius: 10px; flex: none;
+        background: #3776ab; color: #ffd43b; display: grid; place-items: center;
+        font-family: "IBM Plex Mono", monospace; font-weight: 600; font-size: 16px;
+      }
+      .py-head .ptxt { flex: 1; min-width: 220px; }
+      .py-head h2 { margin: 0 0 4px; font-size: 17px; font-weight: 800; letter-spacing: -.01em; }
+      .py-head p { margin: 0; font-size: 13.5px; line-height: 1.6; color: var(--ink-2); max-width: 680px; }
+      .pystat {
+        display: inline-flex; align-items: center; gap: 8px;
+        font-family: "IBM Plex Mono", monospace; font-size: 12.5px; font-weight: 600;
+        border: 1px solid var(--line); border-radius: 999px; padding: 6px 12px;
+        color: var(--ink); white-space: nowrap; background: var(--surface-2);
+      }
+      .engine .pystat { border-color: var(--bar-line); color: var(--bar-ink); background: transparent; }
+      .py-controls {
+        display: flex; gap: 8px; flex-wrap: wrap; align-items: center;
+        margin-top: 16px;
+      }
+      .py-search {
+        flex: 1 1 220px; min-width: 0;
+        display: flex; align-items: center; gap: 8px;
+        border: 1px solid var(--line-strong); border-radius: 9px;
+        padding: 0 12px; background: var(--surface);
+      }
+      .py-search svg { width: 16px; height: 16px; color: var(--ink-3); flex: none; }
+      .py-search input {
+        flex: 1; min-width: 0; border: none; background: transparent; color: var(--ink);
+        font: inherit; font-size: 14.5px; padding: 11px 0; outline: none;
+      }
+      .py-btn {
+        display: inline-flex; align-items: center; gap: 7px;
+        border: 1px solid var(--line-strong); border-radius: 9px;
+        background: var(--surface); color: var(--ink);
+        padding: 11px 16px; font-size: 14px; font-weight: 700;
+        white-space: nowrap;
+      }
+      .py-btn:hover:not(:disabled) { background: var(--surface-2); }
+      .py-btn.primary { background: #3776ab; border-color: #3776ab; color: #fff; }
+      .py-btn.primary:hover:not(:disabled) { background: #2b5b84; border-color: #2b5b84; }
+      .py-btn svg { width: 16px; height: 16px; flex: none; }
+      .py-note { margin-top: 10px; font-size: 13px; color: var(--ink-3); line-height: 1.55; }
+      .py-note.err { color: var(--accent); font-weight: 600; }
+      .py-stats {
+        display: grid; grid-template-columns: repeat(auto-fit, minmax(118px, 1fr));
+        gap: 10px; margin-top: 18px;
+      }
+      .py-stat {
+        background: var(--surface-2); border: 1px solid var(--line);
+        border-radius: 9px; padding: 12px 14px;
+      }
+      .py-stat .v { font-size: 21px; font-weight: 800; letter-spacing: -.01em; font-family: "IBM Plex Mono", monospace; }
+      .py-stat .k { font-size: 12px; color: var(--ink-2); margin-top: 2px; font-weight: 600; }
+      .py-panel h3 { margin: 20px 0 8px; font-size: 14.5px; font-weight: 800; }
+      .py-words { display: flex; gap: 7px; flex-wrap: wrap; }
+      .py-word {
+        font-size: 13px; font-weight: 600; background: var(--surface-2);
+        border: 1px solid var(--line); border-radius: 999px; padding: 5px 11px;
+      }
+      .py-word b { font-family: "IBM Plex Mono", monospace; color: #3776ab; font-weight: 600; }
+      .py-hitlist { margin: 0; padding-left: 20px; font-size: 14px; color: var(--ink-2); line-height: 1.8; }
+      .py-hitlist b { color: var(--ink); }
+      .py-page { border: 1px solid var(--line); border-radius: 9px; margin-top: 8px; overflow: hidden; }
+      .py-page summary {
+        cursor: pointer; padding: 10px 14px; font-size: 13.5px; font-weight: 700;
+        background: var(--surface-2); list-style-position: inside;
+      }
+      .py-page summary .sub { font-weight: 500; color: var(--ink-3); font-family: "IBM Plex Mono", monospace; font-size: 12px; }
+      .py-page pre {
+        margin: 0; padding: 12px 14px; font-family: "IBM Plex Mono", monospace;
+        font-size: 12.5px; line-height: 1.65; white-space: pre-wrap; word-break: break-word;
+        max-height: 280px; overflow: auto; color: var(--ink);
+      }
+      .py-page pre.empty { color: var(--ink-3); font-family: inherit; }
+      .py-more { margin-top: 18px; border-top: 1px solid var(--line); padding-top: 14px; }
+      .py-more summary { cursor: pointer; font-size: 14px; font-weight: 700; }
+      .py-more p { font-size: 13px; color: var(--ink-2); line-height: 1.6; margin: 8px 0; }
+      .py-more p code, .py-note code {
+        font-family: "IBM Plex Mono", monospace; font-size: 12.5px;
+        background: var(--surface-2); border: 1px solid var(--line);
+        border-radius: 5px; padding: 1px 5px;
+      }
+      .py-code {
+        width: 100%; border: 1px solid var(--line-strong); border-radius: 9px;
+        background: var(--surface-2); color: var(--ink);
+        font-family: "IBM Plex Mono", monospace; font-size: 12.5px; line-height: 1.6;
+        padding: 12px 14px; resize: vertical; min-height: 110px;
+      }
+      .py-out {
+        margin: 10px 0 0; background: var(--bar); color: var(--bar-ink);
+        border-radius: 9px; padding: 12px 14px;
+        font-family: "IBM Plex Mono", monospace; font-size: 12.5px; line-height: 1.6;
+        white-space: pre-wrap; word-break: break-word; max-height: 260px; overflow: auto;
+      }
+      .py-out:empty { display: none; }
+      .py-runrow { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
+
+      /* ---------- Text & OCR panel ---------- */
+      .tx-badge {
+        width: 44px; height: 44px; border-radius: 10px; flex: none;
+        background: var(--bar); color: var(--bar-ink); display: grid; place-items: center;
+        font-weight: 800; font-size: 16px; letter-spacing: -.02em;
+      }
+      .tx-page {
+        border: 1px solid var(--line); border-radius: 9px;
+        margin-top: 10px; overflow: hidden;
+      }
+      .tx-pagehead {
+        display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+        padding: 10px 14px; background: var(--surface-2);
+        border-bottom: 1px solid var(--line);
+      }
+      .tx-pagehead .t { font-size: 13.5px; font-weight: 700; }
+      .tx-pagehead .sub {
+        font-weight: 500; color: var(--ink-3);
+        font-family: "IBM Plex Mono", monospace; font-size: 12px;
+      }
+      .tx-src {
+        font-size: 11px; font-weight: 700; letter-spacing: .03em;
+        border-radius: 999px; padding: 3px 9px; white-space: nowrap;
+        background: var(--surface); border: 1px solid var(--line); color: var(--ink-2);
+      }
+      .tx-src.ocr { color: var(--ok); border-color: var(--ok); }
+      .tx-src.none { color: var(--ink-3); }
+      .tx-lines { display: flex; flex-direction: column; gap: 6px; padding: 12px 14px; }
+      .tx-line { display: flex; align-items: center; gap: 6px; }
+      .tx-line input {
+        flex: 1; min-width: 0;
+        border: 1px solid var(--line); border-radius: 8px;
+        background: var(--surface); color: var(--ink);
+        font: inherit; font-size: 13.5px; padding: 8px 10px;
+      }
+      .tx-line input:focus { outline: 2px solid var(--accent); outline-offset: 0; border-color: var(--accent); }
+      .tx-line input.changed { border-color: var(--accent); background: var(--accent-soft); font-weight: 600; }
+      .tx-undo {
+        flex: none; width: 32px; height: 32px; border-radius: 8px;
+        border: 1px solid var(--line); background: var(--surface); color: var(--ink-2);
+        display: grid; place-items: center; padding: 0;
+      }
+      .tx-undo:hover { background: var(--surface-2); color: var(--ink); }
+      .tx-undo svg { width: 15px; height: 15px; }
+      .tx-style {
+        flex: none; display: inline-flex; align-items: center; gap: 6px;
+        font-family: "IBM Plex Mono", monospace; font-size: 11px; font-weight: 600;
+        color: var(--ink-3); white-space: nowrap;
+      }
+      .tx-dot {
+        width: 11px; height: 11px; border-radius: 50%; flex: none;
+        border: 1px solid var(--line-strong);
+      }
+      @media (max-width: 560px) { .tx-style .tx-style-name { display: none; } }
+      .tx-nolines { padding: 12px 14px; font-size: 13.5px; color: var(--ink-3); line-height: 1.55; margin: 0; }
+      .tx-progress {
+        display: flex; align-items: center; gap: 10px;
+        margin-top: 12px; font-size: 13.5px; font-weight: 600; color: var(--ink-2);
+      }
+      .tx-progress .spin {
+        width: 18px; height: 18px; border-radius: 50%; flex: none;
+        border: 3px solid var(--line); border-top-color: var(--accent);
+        animation: rot 0.8s linear infinite;
+      }
+      @media (prefers-reduced-motion: reduce) { .tx-progress .spin { animation: none; } }
+
       /* ---------- Toast ---------- */
       .toast {
         position: fixed; left: 50%; bottom: 22px; transform: translate(-50%, 16px);
@@ -468,6 +639,13 @@
           </button>
         </div>
 
+        <div class="tsep" aria-hidden="true"></div>
+
+        <button class="tbtn" id="btnTxJump" type="button">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v3"/><path d="M16 3h3a2 2 0 0 1 2 2v3"/><path d="M8 21H5a2 2 0 0 1-2-2v-3"/><path d="M16 21h3a2 2 0 0 0 2-2v-3"/><path d="M7 12h10"/></svg>
+          Text<span class="lbl-long">&nbsp;&amp; OCR</span>
+        </button>
+
         <button class="tbtn primary" id="btnDownload" type="button" disabled>
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m7 10 5 5 5-5"/><path d="M12 15V3"/></svg>
           PDF herunterladen
@@ -480,7 +658,8 @@
       <span class="stat"><b id="statPages">0</b>&nbsp;Seiten</span>
       <span class="stat sel" id="statSelWrap" hidden><b id="statSel">0</b>&nbsp;ausgewählt</span>
       <span class="stat"><span class="engdot load" data-engdot></span><span data-engtext>C++-Engine lädt …</span></span>
-      <span class="hintline">Seite gedrückt halten &amp; ziehen zum Sortieren · Tippen wählt eine Seite aus</span>
+      <span class="stat"><span class="engdot" data-ocrdot></span><span data-ocrtext>OCR nicht gestartet</span></span>
+      <span class="hintline">Seite gedrückt halten &amp; ziehen zum Sortieren · Tippen wählt eine Seite aus</span></span>
     </div>
 
     <div class="filebar" id="filebar">
@@ -495,7 +674,7 @@
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M12 18v-6"/><path d="m9 15 3 3 3-3"/></svg>
           </div>
           <h1>PDFs hier ablegen</h1>
-          <p>Ziehe eine oder mehrere PDF-Dateien in dieses Feld – oder wähle sie über den Button aus. Danach kannst du Seiten löschen, drehen, umsortieren und alles als ein neues PDF speichern.</p>
+          <p>Ziehe eine oder mehrere PDF-Dateien in dieses Feld – oder wähle sie über den Button aus. Danach kannst du Seiten löschen, drehen, umsortieren, gescannte Seiten per Texterkennung (OCR) lesbar und durchsuchbar machen, Text direkt ändern – und alles als ein neues PDF speichern.</p>
           <label class="dz-btn" id="btnPick" for="fileInput" tabindex="0" role="button">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M12 18v-6"/><path d="m9 9 3-3 3 3"/></svg>
             PDF-Dateien auswählen
@@ -530,6 +709,15 @@
           <span class="engstat"><span class="engdot load" data-engdot></span><span data-engtext>C++-Engine lädt …</span></span>
         </div>
 
+        <div class="engine">
+          <div class="eic" aria-hidden="true" style="font-family:inherit;font-size:19px;font-weight:800">Aa</div>
+          <div class="etxt">
+            <h2>Scans lesbar machen: Texterkennung (OCR) &amp; Text ändern</h2>
+            <p>Eine gescannte PDF ist nur ein Foto vom Papier – darin kann man nichts suchen oder ändern. Die <b>Texterkennung (OCR)</b> liest den Text aus dem Bild und legt ihn als echte Textebene in die gespeicherte PDF: Danach ist sie <b>durchsuchbar</b>, der Text lässt sich <b>markieren und kopieren</b>. Und Zeilen, die schon Text haben, kannst du <b>direkt ändern</b> – die Änderung steht danach sichtbar in der neuen PDF. Alles läuft auf deinem Gerät; nur die OCR lädt beim ersten Start einmal ihre Sprachdaten (Deutsch + Englisch) aus dem Internet. Lade eine PDF und tippe oben auf „Text &amp; OCR“.</p>
+          </div>
+          <span class="engstat"><span class="engdot" data-ocrdot></span><span data-ocrtext>OCR nicht gestartet</span></span>
+        </div>
+
         <div class="howto">
           <h2>So geht es</h2>
           <ol>
@@ -537,12 +725,51 @@
             <li><b>Seiten bearbeiten:</b> Seite antippen zum Auswählen, dann löschen oder drehen. Zum Verschieben die Seite gedrückt halten, bis sie sich abhebt, und an die neue Stelle ziehen.</li>
             <li><b>Prüfen:</b> Die große Zahl auf jeder Seite zeigt die neue Reihenfolge im fertigen PDF.</li>
             <li><b>Speichern:</b> Oben auf „PDF herunterladen“ tippen. Danach erscheint unten eine Karte: Dort auf „Datei speichern“ tippen und „In Dateien sichern“ wählen – oder die Datei direkt herunterladen.</li>
-            <li><b>Am PC offline nutzen:</b> Alles steckt in einer einzigen Datei. Datei auf den PC kopieren und per Doppelklick in Chrome oder Edge öffnen – kein Internet, keine Installation, alle Funktionen laufen offline.</li>
+            <li><b>Scan durchsuchbar machen:</b> Oben auf „Text &amp; OCR“ tippen, dann auf „Texterkennung (OCR) starten“. Seiten ohne Text werden gelesen, der erkannte Text erscheint Zeile für Zeile – und landet beim Speichern als unsichtbare Textebene in der PDF, sodass du danach in jedem PDF-Programm darin suchen kannst.</li>
+            <li><b>Text ändern:</b> Im Bereich „Text &amp; OCR“ steht der Text jeder Seite Zeile für Zeile in Feldern. Einfach den Text in einem Feld ändern und danach oben auf „PDF herunterladen“ tippen – der neue Text steht an ihrer Stelle in der gespeicherten PDF, in der Schriftart, Größe und Farbe des Originals. Rechts an jedem Feld siehst du, welche Schrift die Zeile hat.</li>
+            <li><b>Am PC offline nutzen:</b> Der Editor selbst steckt in einer einzigen Datei und läuft offline (Doppelklick in Chrome oder Edge). Nur die Texterkennung (OCR) braucht beim ersten Start Internet, weil sie ihre Sprachdaten einmal lädt.</li>
           </ol>
         </div>
       </section>
 
-      <section class="grid" id="grid" hidden aria-label="Seiten"></section>
+            <section class="py-panel" id="txPanel" hidden aria-label="Text und OCR">
+        <div class="py-head">
+          <div class="tx-badge" aria-hidden="true">Aa</div>
+          <div class="ptxt">
+            <h2>Text &amp; OCR – lesbar, durchsuchbar, bearbeitbar</h2>
+            <p>Gescannte Seiten sind nur Bilder: Die <b>Texterkennung (OCR)</b> liest ihren Text und legt ihn beim Speichern als echte Textebene in die PDF – dann kannst du darin suchen und Text kopieren. Und jede Textzeile unten kannst du <b>direkt ändern</b>: Beim Speichern wird die alte Zeile überdeckt und dein neuer Text steht an ihrer Stelle – in der <b>Schriftart, Größe und Farbe des Originals</b> (auch Fett und Kursiv werden übernommen), und die alte Zeile wird in der Hintergrundfarbe der Seite überdeckt, damit kein weißer Fleck zu sehen ist. Alles auf deinem Gerät, kein Upload.</p>
+          </div>
+          <span class="pystat"><span class="engdot" data-ocrdot></span><span data-ocrtext>OCR nicht gestartet</span></span>
+        </div>
+
+        <div class="py-controls">
+          <button class="py-btn primary" id="txOcr" type="button">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v3"/><path d="M16 3h3a2 2 0 0 1 2 2v3"/><path d="M8 21H5a2 2 0 0 1-2-2v-3"/><path d="M16 21h3a2 2 0 0 0 2-2v-3"/><path d="M7 12h10"/></svg>
+            Texterkennung (OCR) starten
+          </button>
+          <label class="py-search">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+            <input type="search" id="txSearch" placeholder="Im Text suchen, z. B. Rechnung" autocomplete="off" />
+          </label>
+          <button class="py-btn" id="txSearchBtn" type="button">Suchen</button>
+          <button class="py-btn" id="txDownloadTxt" type="button" disabled>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m7 10 5 5 5-5"/><path d="M12 15V3"/></svg>
+            Text als .txt laden
+          </button>
+        </div>
+        <div class="tx-progress" id="txProgress" hidden><span class="spin"></span><span id="txProgressText">Texterkennung läuft …</span></div>
+        <div class="py-note" id="txNote">Tipp: Auf „Texterkennung (OCR) starten“ tippen – Seiten ohne Text (Scans) werden gelesen. Der erste Start lädt die OCR mit Sprachdaten Deutsch + Englisch einmal aus dem Internet. Geänderte Zeilen und die OCR-Textebene kommen beim „PDF herunterladen“ oben automatisch in die gespeicherte Datei. Geänderter Text übernimmt Schriftart, Größe, Fett/Kursiv und Farbe der Originalzeile – rechts an jedem Feld siehst du, welche Schrift sie hat.</div>
+
+        <div id="txSearchBlock" hidden>
+          <h3>Suche</h3>
+          <div id="txSearchResults"></div>
+        </div>
+
+        <h3>Text je Seite – Zeilen antippen und ändern</h3>
+        <div id="txPages"></div>
+      </section>
+
+<section class="grid" id="grid" hidden aria-label="Seiten"></section>
     </main>
 
     <div class="dlpanel" id="dlpanel" hidden>
@@ -961,7 +1188,19 @@ window.__QPDF_WASM_B64__ =
           dlShare: document.getElementById("dlShare"),
           dlSave: document.getElementById("dlSave"),
           dlOpen: document.getElementById("dlOpen"),
-          dlClose: document.getElementById("dlClose")
+          dlClose: document.getElementById("dlClose"),
+          btnTxJump: document.getElementById("btnTxJump"),
+          txPanel: document.getElementById("txPanel"),
+          txOcr: document.getElementById("txOcr"),
+          txSearch: document.getElementById("txSearch"),
+          txSearchBtn: document.getElementById("txSearchBtn"),
+          txDownloadTxt: document.getElementById("txDownloadTxt"),
+          txNote: document.getElementById("txNote"),
+          txProgress: document.getElementById("txProgress"),
+          txProgressText: document.getElementById("txProgressText"),
+          txSearchBlock: document.getElementById("txSearchBlock"),
+          txSearchResults: document.getElementById("txSearchResults"),
+          txPages: document.getElementById("txPages")
         };
 
         var toastTimer = null;
@@ -1450,6 +1689,13 @@ window.__QPDF_WASM_B64__ =
           pages = pages.filter(function (p) { return p.fileId !== fid; });
           ids.forEach(function (id) { selected.delete(id); var c = cardEl(id); if (c) c.remove(); });
           if (f && f.jsDoc) f.jsDoc.destroy();
+          Object.keys(nativeLinesCache).forEach(function (k) {
+            if (k.indexOf(fid + ":") === 0) delete nativeLinesCache[k];
+          });
+          Object.keys(ocrCache).forEach(function (k) {
+            if (k.indexOf(fid + ":") === 0) delete ocrCache[k];
+          });
+          ids.forEach(function (id) { delete pageTextData[id]; });
           files.delete(fid);
           toast("Datei entfernt.");
           refresh();
@@ -1666,6 +1912,8 @@ window.__QPDF_WASM_B64__ =
           els.btnDownload.disabled = true;
           setBusy(true, "PDF wird erstellt …");
           buildPdf(pages).then(function (bytes) {
+            return applyTextLayer(bytes, pages);
+          }).then(function (bytes) {
             setBusy(false);
             els.btnDownload.disabled = false;
             presentDownload(bytes, baseName());
@@ -1683,6 +1931,8 @@ window.__QPDF_WASM_B64__ =
           els.btnExtract.disabled = true;
           setBusy(true, "PDF wird erstellt …");
           buildPdf(list).then(function (bytes) {
+            return applyTextLayer(bytes, list);
+          }).then(function (bytes) {
             setBusy(false);
             els.btnExtract.disabled = false;
             presentDownload(bytes, "auswahl.pdf");
@@ -1692,6 +1942,900 @@ window.__QPDF_WASM_B64__ =
             toast("Fehler beim Erstellen der PDF.", true);
           });
         });
+
+        /* ---------------- Text & OCR: lesbar, durchsuchbar, bearbeitbar ----------------
+           Zwei Wege führen zum Text einer Seite:
+           1. Die PDF hat schon eine Textebene (normaler Export aus Word
+              & Co.): pdf.js liest die Zeilen samt Position aus.
+           2. Die Seite ist ein Scan (nur ein Bild): Die Texterkennung
+              Tesseract.js (OCR, Deutsch + Englisch, läuft per WebAssembly
+              im Browser) liest den Text aus dem gerenderten Seitenbild
+              und liefert jede Zeile mit ihrer Position.
+           In beiden Fällen steht der Text unten Zeile für Zeile in
+           Eingabefeldern und kann geändert werden. Beim Speichern
+           (applyTextLayer, läuft über dem fertigen PDF aus der
+           C++-/Reserve-Engine) passiert dann:
+           - OCR-Zeilen ohne Änderung: als unsichtbare Textebene über
+             dem Scan einbetten – die PDF wird dadurch in jedem
+             Programm durchsuchbar, Text lässt sich markieren/kopieren.
+           - Geänderte Zeilen (egal ob Scan oder Textebene): alte Zeile
+             mit einem Rechteck in der Hintergrundfarbe der Seite (aus
+             dem gerenderten Seitenbild um die Zeile herum gemessen,
+             nicht pauschal Weiß) überdecken und den neuen Text an der
+             gleichen Stelle sichtbar einsetzen – in der Schriftart,
+             Größe, Fett-/Kursiv-Form und Textfarbe der Originalzeile.
+             Schriftart und Farbe liest der Editor beim Einlesen jeder
+             Zeile mit aus (Schriftname aus der PDF, Farben aus dem
+             Seitenbild), damit der Ersatz wie das Original aussieht
+             statt wie fremder Text.
+           Die OCR-Bibliothek wird erst auf Knopfdruck aus dem CDN
+           geladen (Sprachdaten Deutsch + Englisch) – der Rest des
+           Editors bleibt als einzelne Datei offline nutzbar. */
+        var TESSERACT_SRC = "https://cdn.jsdelivr.net/npm/tesseract.js@5.1.1/dist/tesseract.min.js";
+        var tessWorker = null;
+        var tessLoading = null;
+        var ocrState = "idle"; /* idle | loading | ready | error */
+        var ocrBusy = false;
+        var pageTextData = {};     /* pg.id -> {source:'native'|'ocr'|'none', lines:[{id,text,x,y,w,fs}]} */
+        var edits = {};            /* lineId -> geänderter Text */
+        var nativeLinesCache = {}; /* "fileId:pageIndex" -> Zeilen ohne IDs */
+        var ocrCache = {};         /* "fileId:pageIndex" -> Zeilen ohne IDs */
+        var UNDO_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 14 4 9l5-5"/><path d="M4 9h10.5a5.5 5.5 0 0 1 5.5 5.5 5.5 5.5 0 0 1-5.5 5.5H11"/></svg>';
+
+        function setOcr(state, label) {
+          ocrState = state;
+          var dotCls = state === "ready" ? "engdot ok" : (state === "error" ? "engdot fb" : (state === "loading" ? "engdot load" : "engdot"));
+          document.querySelectorAll("[data-ocrdot]").forEach(function (d) { d.className = dotCls; });
+          document.querySelectorAll("[data-ocrtext]").forEach(function (t) { t.textContent = label; });
+        }
+        function txNote(msg, isErr) {
+          els.txNote.textContent = msg;
+          els.txNote.className = "py-note" + (isErr ? " err" : "");
+        }
+        function lineKey(pg) { return pg.fileId + ":" + pg.pageIndex; }
+        function withIds(pg, lines) {
+          return lines.map(function (l, i) {
+            return {
+              id: pg.id + ":" + i, text: l.text, x: l.x, y: l.y, w: l.w, fs: l.fs,
+              fontKey: l.fontKey || "Helvetica", fam: l.fam || "sans",
+              bold: !!l.bold, italic: !!l.italic,
+              color: l.color || null, bg: l.bg || null,
+              styleLabel: l.styleLabel || ""
+            };
+          });
+        }
+
+        /* ---------- Original-Stil einer Zeile erkennen ----------
+           Damit geänderter Text aussieht wie das Original, liest der
+           Editor pro Zeile mit aus: Schriftfamilie (Serif / Sans /
+           Schreibmaschine), Fett, Kursiv, genaue Größe und die Farben
+           von Text und Hintergrund. Die Schrift kommt aus den Angaben
+           der PDF selbst, die Farben werden aus dem gerenderten
+           Seitenbild um die Zeile herum gemessen (dunkelste Pixel =
+           Text, Randpixel = Hintergrund). Eingebettet werden beim
+           Speichern die pdf-lib-Standardschriften, die der Original-
+           schrift am nächsten kommen (Times / Helvetica / Courier in
+           je vier Schnitten). */
+        function classifyFont(fontName, family) {
+          var s = ((fontName || "") + " " + (family || "")).toLowerCase();
+          var bold = /bold|black|heavy|semibold|demibold/.test(s);
+          var italic = /italic|oblique/.test(s);
+          var fam = "sans";
+          if (/courier|mono|consol|typewriter|ocr/.test(s)) fam = "mono";
+          else if (/times|georgia|cambria|garamond|palatino|charter|book|roman/.test(s) || (/serif/.test(s) && !/sans/.test(s))) fam = "serif";
+          var base = fam === "serif" ? "TimesRoman" : (fam === "mono" ? "Courier" : "Helvetica");
+          var key = base;
+          if (fam === "serif") key = bold && italic ? "TimesRomanBoldItalic" : bold ? "TimesRomanBold" : italic ? "TimesRomanItalic" : "TimesRoman";
+          else key = bold && italic ? base + "BoldOblique" : bold ? base + "Bold" : italic ? base + "Oblique" : base;
+          var cssFam = fam === "serif" ? "Georgia, 'Times New Roman', Times, serif"
+            : fam === "mono" ? "'Courier New', Courier, monospace"
+            : "Helvetica, Arial, sans-serif";
+          var label = fam === "serif" ? "Times" : fam === "mono" ? "Courier" : "Helvetica";
+          if (bold && italic) label += " fett kursiv";
+          else if (bold) label += " fett";
+          else if (italic) label += " kursiv";
+          return { fam: fam, bold: bold, italic: italic, fontKey: key, cssFam: cssFam, label: label };
+        }
+
+        function styleForItem(it, tc, page) {
+          var fam = "";
+          try {
+            var st = tc && tc.styles && it.fontName ? tc.styles[it.fontName] : null;
+            if (st && st.fontFamily) fam = st.fontFamily;
+          } catch (e) { /* Stil ist Zusatzinfo, nie ein Abbruchgrund */ }
+          var realName = "";
+          try {
+            if (page && page.commonObjs && it.fontName) {
+              var fo = page.commonObjs.get(it.fontName);
+              if (fo && fo.name) realName = fo.name;
+            }
+          } catch (e) { /* s. o. */ }
+          return classifyFont(realName + " " + (it.fontName || ""), fam);
+        }
+
+        /* Farben um eine Zeile aus dem Seitenbild messen.
+           (rx, ry) ist die linke obere Ecke des Zeilenrahmens in
+           Canvas-Pixeln, der Rahmen ist rw x rh groß. Hintergrund =
+           Median der Randpixel, Textfarbe = Mittel der dunkelsten
+           Pixel im Inneren. Liefert {bg:[r,g,b], fg:[r,g,b]} mit
+           Werten 0..1 – oder null, wenn nichts Brauchbares messbar
+           ist (dann gelten die bisherigen Standardfarben). */
+        function sampleRegionColors(ctx, rx, ry, rw, rh) {
+          try {
+            rx = Math.max(0, Math.floor(rx)); ry = Math.max(0, Math.floor(ry));
+            rw = Math.max(4, Math.floor(rw)); rh = Math.max(4, Math.floor(rh));
+            if (rx + rw > ctx.canvas.width) rw = ctx.canvas.width - rx;
+            if (ry + rh > ctx.canvas.height) rh = ctx.canvas.height - ry;
+            if (rw < 4 || rh < 4) return null;
+            var data = ctx.getImageData(rx, ry, rw, rh).data;
+            var ringR = [], ringG = [], ringB = [], inner = [];
+            for (var py = 0; py < rh; py += 1) {
+              for (var px = 0; px < rw; px += 2) {
+                var o = (py * rw + px) * 4;
+                var r = data[o], g = data[o + 1], b = data[o + 2];
+                if (px < 3 || py < 3 || px > rw - 4 || py > rh - 4) {
+                  if (ringR.length < 4000) { ringR.push(r); ringG.push(g); ringB.push(b); }
+                } else {
+                  inner.push([r, g, b, r * 0.299 + g * 0.587 + b * 0.114]);
+                }
+              }
+            }
+            if (!ringR.length || inner.length < 8) return null;
+            function med(a) { a.sort(function (x, y) { return x - y; }); return a[Math.floor(a.length / 2)]; }
+            var bg = [med(ringR.slice()), med(ringG.slice()), med(ringB.slice())];
+            inner.sort(function (a, b) { return a[3] - b[3]; });
+            var take = Math.max(4, Math.floor(inner.length * 0.12));
+            var fr = 0, fg2 = 0, fb = 0;
+            for (var i = 0; i < take; i++) { fr += inner[i][0]; fg2 += inner[i][1]; fb += inner[i][2]; }
+            var fg = [fr / take, fg2 / take, fb / take];
+            var bgLum = bg[0] * 0.299 + bg[1] * 0.587 + bg[2] * 0.114;
+            var fgLum = fg[0] * 0.299 + fg[1] * 0.587 + fg[2] * 0.114;
+            if (Math.abs(bgLum - fgLum) < 28) return { bg: [bg[0] / 255, bg[1] / 255, bg[2] / 255], fg: null };
+            return { bg: [bg[0] / 255, bg[1] / 255, bg[2] / 255], fg: [fg[0] / 255, fg[1] / 255, fg[2] / 255] };
+          } catch (e) { return null; }
+        }
+
+        function colorCss(c) {
+          if (!c) return "";
+          function h(v) { var s = Math.round(Math.max(0, Math.min(1, v)) * 255).toString(16); return s.length < 2 ? "0" + s : s; }
+          return "#" + h(c[0]) + h(c[1]) + h(c[2]);
+        }
+
+        /* Tintenmaß einer Zeile im Seitenbild: engster Rahmen um die
+           dunklen Pixel plus die mittlere Strichstärke (Median der
+           dunklen Lauflängen in der Zeilenmitte, dort stehen die
+           Stämme der Buchstaben). Daraus lassen sich echte
+           Schriftgröße und Fett ablesen. Das ist nötig, weil Scans in
+           der PDF gar keine Schriftangaben haben und die OCR nur den
+           Rahmen der ganzen Zeile liefert – mit Leerraum oben und
+           unten und ganz ohne Stärke. Genau darum wirkten geänderte
+           Scan-Zeilen bisher zu klein und zu dünn: Sie wurden in
+           normaler Helvetica mit 74 % der Rahmenhöhe neu gesetzt,
+           obwohl das Original fett und größer gedruckt war.
+           (rx, ry, rw, rh) in Canvas-Pixeln, bg/fg als [r,g,b] 0..1
+           (aus sampleRegionColors) für die Schwelle, sonst fest 150. */
+        function measureInk(ctx, rx, ry, rw, rh, bg, fg) {
+          try {
+            rx = Math.max(0, Math.floor(rx)); ry = Math.max(0, Math.floor(ry));
+            rw = Math.floor(rw); rh = Math.floor(rh);
+            if (rx + rw > ctx.canvas.width) rw = ctx.canvas.width - rx;
+            if (ry + rh > ctx.canvas.height) rh = ctx.canvas.height - ry;
+            if (rw < 8 || rh < 6) return null;
+            var data = ctx.getImageData(rx, ry, rw, rh).data;
+            var thr = 150;
+            if (bg && fg) {
+              var bl = (bg[0] * 0.299 + bg[1] * 0.587 + bg[2] * 0.114) * 255;
+              var fl = (fg[0] * 0.299 + fg[1] * 0.587 + fg[2] * 0.114) * 255;
+              if (bl - fl > 28) thr = (bl + fl) / 2;
+            }
+            function isDark(o) { return data[o] * 0.299 + data[o + 1] * 0.587 + data[o + 2] * 0.114 < thr; }
+            var rows = [], cols = [], darkTotal = 0, py, px;
+            for (py = 0; py < rh; py++) rows.push(0);
+            for (px = 0; px < rw; px++) cols.push(0);
+            for (py = 0; py < rh; py++) {
+              for (px = 0; px < rw; px++) {
+                if (isDark((py * rw + px) * 4)) { rows[py]++; cols[px]++; darkTotal++; }
+              }
+            }
+            if (darkTotal < 12) return null;
+            var top = -1, bottom = -1, left = -1, right = -1, k;
+            for (k = 0; k < rh; k++) { if (rows[k] >= 2) { top = k; break; } }
+            for (k = rh - 1; k >= 0; k--) { if (rows[k] >= 2) { bottom = k; break; } }
+            for (k = 0; k < rw; k++) { if (cols[k] >= 2) { left = k; break; } }
+            for (k = rw - 1; k >= 0; k--) { if (cols[k] >= 2) { right = k; break; } }
+            if (top < 0 || bottom <= top || left < 0 || right <= left) return null;
+            var inkH = bottom - top + 1;
+            var bandTop = top + Math.floor(inkH * 0.28);
+            var bandBot = top + Math.ceil(inkH * 0.72);
+            var runs = [];
+            for (var by = bandTop; by <= bandBot && by < rh; by++) {
+              var run = 0;
+              for (var bx = left; bx <= right; bx++) {
+                if (isDark((by * rw + bx) * 4)) { run++; }
+                else if (run > 0) { runs.push(run); run = 0; }
+              }
+              if (run > 0) runs.push(run);
+            }
+            if (!runs.length) return null;
+            runs.sort(function (a, b) { return a - b; });
+            return { top: top, bottom: bottom, left: left, right: right, medianRun: runs[Math.floor(runs.length / 2)] };
+          } catch (e) { return null; }
+        }
+
+        /* Aus dem Tintenmaß Größe und Fett einer Zeile schätzen: Die
+           Tintenhöhe reicht von der Oberlänge (Großbuchstaben,
+           Ziffern, b/d/f/h/k/l/t ≈ 0,72 der Schriftgröße; reine
+           Kleinbuchstaben nur Mittellänge ≈ 0,52) bis zur Unterlänge,
+           wenn die Zeile Unterlängen enthält (g, j, p, q, y ≈ 0,21).
+           Fett erkennt man an der Strichstärke im Verhältnis zur
+           Größe: normal ≈ 0,08–0,11, fett ≈ 0,15–0,20. */
+        function inkTextStyle(ink, text, scale) {
+          var inkHpt = (ink.bottom - ink.top + 1) / scale;
+          var hasTall = /[A-ZÄÖÜ0-9bdfhkl(\/]/.test(text || "");
+          var hasDesc = /[gjpqyQJ,;]/.test(text || "");
+          var extent = (hasTall ? 0.72 : 0.52) + (hasDesc ? 0.21 : 0);
+          var fs = Math.round((inkHpt / extent) * 10) / 10;
+          if (!isFinite(fs) || fs <= 0) return null;
+          fs = Math.max(5, Math.min(60, fs));
+          var bold = (ink.medianRun / (fs * scale)) >= 0.14;
+          return { fs: fs, bold: bold, hasDesc: hasDesc };
+        }
+
+        function boldFontKey(key) {
+          if (!key) return "HelveticaBold";
+          if (/Bold/.test(key)) return key;
+          if (/Oblique$/.test(key)) return key.replace(/Oblique$/, "BoldOblique");
+          if (/Italic$/.test(key)) return key.replace(/Italic$/, "BoldItalic");
+          return key + "Bold";
+        }
+
+        /* pdf-lib schreibt mit Standardschriften (WinAnsi-Zeichensatz).
+           Zeichen außerhalb dieses Zeichensatzes würden beim Speichern
+           einen Fehler werfen – sie werden hier vorher ersetzt/entfernt,
+           damit eine einzige exotische Zeile nie den Export killt. */
+        var WINANSI_EXTRA_CHARS = "€‚ƒ„…†‡ˆ‰Š‹ŒŽ‘’“”•–—˜™š›œžŸ";
+        function sanitizeForPdf(text) {
+          var out = "";
+          for (var i = 0; i < text.length; i++) {
+            var code = text.charCodeAt(i);
+            var ch = text.charAt(i);
+            if (code === 0xA0 || code === 0x202F || code === 0x09) { out += " "; continue; }
+            if (code >= 0x20 && code <= 0x7E) { out += ch; continue; }
+            if (code >= 0xA0 && code <= 0xFF && code !== 0x81 && code !== 0x8D && code !== 0x8F && code !== 0x90 && code !== 0x9D) { out += ch; continue; }
+            if (WINANSI_EXTRA_CHARS.indexOf(ch) !== -1) { out += ch; continue; }
+          }
+          return out;
+        }
+
+        var measureCtx = document.createElement("canvas").getContext("2d");
+        function measurePx(text, fontPx, style) {
+          try {
+            var fam = style && style.cssFam ? style.cssFam : "Helvetica, Arial, sans-serif";
+            measureCtx.font = (style && style.italic ? "italic " : "") + (style && style.bold ? "700 " : "400 ") + fontPx + "px " + fam;
+            return measureCtx.measureText(text).width;
+          } catch (e) { return 0; }
+        }
+
+        /* Zeilen einer vorhandenen Textebene lesen: pdf.js liefert die
+           Textstücke mit Position (Transformationsmatrix). Stücke mit
+           fast gleicher Grundlinie werden zu einer Zeile verbunden,
+           alle Positionen über den Viewport in echte PDF-Punkte
+           (Ursprung unten links) umgerechnet – genau das Koordinaten-
+           system, in dem pdf-lib später malt. */
+        function extractNativeLines(pg) {
+          if (pg.fileId === null) return Promise.resolve([]);
+          var key = lineKey(pg);
+          if (nativeLinesCache[key]) return Promise.resolve(nativeLinesCache[key]);
+          var f = files.get(pg.fileId);
+          if (!f || !f.jsDocPromise) { nativeLinesCache[key] = []; return Promise.resolve([]); }
+          return f.jsDocPromise.then(function (jsDoc) {
+            return jsDoc.getPage(pg.pageIndex + 1);
+          }).then(function (page) {
+            var viewport = page.getViewport({ scale: 2 });
+            return page.getTextContent().then(function (tc) {
+              var raw = [];
+              (tc.items || []).forEach(function (it) {
+                if (!it.str || !it.str.trim()) return;
+                var tx = pdfjsLib.Util.transform(viewport.transform, it.transform);
+                var fontPx = Math.sqrt(tx[2] * tx[2] + tx[3] * tx[3]);
+                if (!isFinite(fontPx) || fontPx <= 0) fontPx = 12 * viewport.scale;
+                raw.push({
+                  str: it.str, x: tx[4], yBase: tx[5],
+                  w: Math.max(0, (it.width || 0) * viewport.scale),
+                  fontPx: fontPx, style: styleForItem(it, tc, page)
+                });
+              });
+              var groups = [];
+              raw.forEach(function (r) {
+                var g = null;
+                for (var i = groups.length - 1; i >= 0; i--) {
+                  if (Math.abs(groups[i].yBase - r.yBase) <= Math.max(3, r.fontPx * 0.45)) { g = groups[i]; break; }
+                }
+                if (!g) { g = { yBase: r.yBase, fontPx: r.fontPx, items: [], style: r.style, bestLen: -1 }; groups.push(g); }
+                g.items.push(r);
+                /* Maßgeblich für Schrift und Größe der Zeile ist das
+                   längste Stück – nicht das größte Einzelzeichen.
+                   Früher zählte das Maximum, dadurch bekamen Zeilen mit
+                   einer einzelnen großen Zahl eine falsche Größe und
+                   wirkten nach dem Ändern fremd. */
+                var ln = r.str.trim().length;
+                if (ln > g.bestLen) { g.bestLen = ln; g.style = r.style; g.fontPx = r.fontPx; }
+              });
+              groups.sort(function (a, b) { return a.yBase - b.yBase; });
+              var lines = [], metas = [];
+              groups.forEach(function (g) {
+                g.items.sort(function (a, b) { return a.x - b.x; });
+                var text = "", x0 = Infinity, x1 = -Infinity, prevEnd = null;
+                g.items.forEach(function (r) {
+                  if (prevEnd !== null && r.x - prevEnd > g.fontPx * 0.22 && text && !/\s$/.test(text) && !/^\s/.test(r.str)) text += " ";
+                  text += r.str;
+                  x0 = Math.min(x0, r.x);
+                  x1 = Math.max(x1, r.x + Math.max(r.w, measurePx(r.str, r.fontPx, r.style)));
+                  prevEnd = r.x + r.w;
+                });
+                text = text.replace(/\s+/g, " ").trim();
+                if (!text) return;
+                var pt = viewport.convertToPdfPoint(x0, g.yBase);
+                var fsPt = Math.round((g.fontPx / viewport.scale) * 10) / 10;
+                lines.push({
+                  text: text, x: pt[0], y: pt[1], w: (x1 - x0) / viewport.scale, fs: fsPt,
+                  fontKey: g.style.fontKey, fam: g.style.fam, bold: g.style.bold, italic: g.style.italic,
+                  styleLabel: g.style.label + " · " + ("" + fsPt).replace(".", ",") + " pt"
+                });
+                metas.push({ x0: x0, x1: x1, yBase: g.yBase, fontPx: g.fontPx });
+              });
+              if (!lines.length) { nativeLinesCache[key] = lines; return lines; }
+              /* Farben aus dem Seitenbild messen: Seite einmal in
+                 genau diesem Viewport rendern und pro Zeile Text- und
+                 Hintergrundfarbe bestimmen. Schlägt das Rendern fehl,
+                 bleiben die Zeilen ohne Farben – beim Speichern gelten
+                 dann die Standardwerte. */
+              var canvas = document.createElement("canvas");
+              canvas.width = Math.floor(viewport.width);
+              canvas.height = Math.floor(viewport.height);
+              var ctx = canvas.getContext("2d");
+              ctx.fillStyle = "#ffffff";
+              ctx.fillRect(0, 0, canvas.width, canvas.height);
+              return page.render({ canvasContext: ctx, viewport: viewport }).promise.then(function () {
+                lines.forEach(function (line, i) {
+                  var m = metas[i];
+                  var c = sampleRegionColors(ctx, m.x0 - m.fontPx * 0.18, m.yBase - m.fontPx * 1.02, (m.x1 - m.x0) + m.fontPx * 0.36, m.fontPx * 1.5);
+                  if (c) { line.bg = c.bg; if (c.fg) line.color = c.fg; }
+                  /* Gegenprobe im Bild: Manche PDFs (z. B. Scans mit
+                     unsichtbarer Textebene vom Scanner) nennen für
+                     eine sichtbar fette, große Zeile eine neutrale
+                     Schrift in falscher Größe. Dann zählt das Bild:
+                     Strichstärke und Tintenhöhe korrigieren Fett und
+                     Größe, sonst wirkt geänderter Text dünner und
+                     kleiner als das Original. Bei echten Text-PDFs
+                     stimmen Maß und Angabe überein – es ändert sich
+                     nichts (Korrektur erst ab 18 % Abweichung). */
+                  var ink = measureInk(ctx, m.x0 - m.fontPx * 0.18, m.yBase - m.fontPx * 1.02, (m.x1 - m.x0) + m.fontPx * 0.36, m.fontPx * 1.5, c && c.bg, c && c.fg);
+                  if (ink) {
+                    var ist = inkTextStyle(ink, line.text, viewport.scale);
+                    if (ist) {
+                      if (!line.bold && ist.bold) {
+                        line.bold = true;
+                        line.fontKey = boldFontKey(line.fontKey);
+                        line.styleLabel = line.styleLabel.replace(/ · /, " fett · ");
+                      }
+                      if (line.fs > 0 && Math.abs(ist.fs - line.fs) / line.fs > 0.18) {
+                        line.fs = ist.fs;
+                        line.styleLabel = line.styleLabel.replace(/[0-9]+(?:[.,][0-9])? pt$/, ("" + ist.fs).replace(".", ",") + " pt");
+                      }
+                    }
+                  }
+                });
+                nativeLinesCache[key] = lines;
+                return lines;
+              }).catch(function () {
+                nativeLinesCache[key] = lines;
+                return lines;
+              });
+            });
+          }).catch(function () { nativeLinesCache[key] = []; return []; });
+        }
+
+        /* OCR einer Seite: Seite groß rendern (ca. 2300 px breit, gut
+           für die Erkennung), Tesseract liest Zeilen samt Rahmen aus
+           dem Bild, Rahmen werden in PDF-Punkte umgerechnet. */
+        function ensureTesseract() {
+          if (tessWorker) return Promise.resolve(tessWorker);
+          if (tessLoading) return tessLoading;
+          setOcr("loading", "OCR lädt …");
+          tessLoading = new Promise(function (resolve, reject) {
+            function have() { return typeof window.Tesseract !== "undefined" && !!window.Tesseract.createWorker; }
+            if (have()) { resolve(); return; }
+            var s = document.createElement("script");
+            s.src = TESSERACT_SRC;
+            s.onload = function () { if (have()) resolve(); else reject(new Error("Tesseract leer")); };
+            s.onerror = function () { reject(new Error("tesseract.min.js nicht erreichbar")); };
+            document.head.appendChild(s);
+          }).then(function () {
+            return window.Tesseract.createWorker(["deu", "eng"]);
+          }).then(function (w) {
+            tessWorker = w;
+            setOcr("ready", "OCR bereit (Deutsch + Englisch)");
+            return w;
+          }).catch(function (err) {
+            tessLoading = null;
+            setOcr("error", "OCR nicht geladen");
+            throw err;
+          });
+          return tessLoading;
+        }
+
+        function ocrPage(pg) {
+          var key = lineKey(pg);
+          if (ocrCache[key]) return Promise.resolve(ocrCache[key]);
+          var f = files.get(pg.fileId);
+          if (!f || !f.jsDocPromise) { ocrCache[key] = []; return Promise.resolve([]); }
+          return f.jsDocPromise.then(function (jsDoc) {
+            return jsDoc.getPage(pg.pageIndex + 1);
+          }).then(function (page) {
+            var base = page.getViewport({ scale: 1 });
+            var scale = Math.min(3.2, Math.max(1.6, 2300 / base.width));
+            var viewport = page.getViewport({ scale: scale });
+            var canvas = document.createElement("canvas");
+            canvas.width = Math.floor(viewport.width);
+            canvas.height = Math.floor(viewport.height);
+            var ctx = canvas.getContext("2d");
+            ctx.fillStyle = "#ffffff";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            return page.render({ canvasContext: ctx, viewport: viewport }).promise.then(function () {
+              return ensureTesseract().then(function (worker) {
+                return worker.recognize(canvas, {}, { blocks: true });
+              }).then(function (result) {
+                var lines = [];
+                var blocks = (result && result.data && result.data.blocks) || [];
+                blocks.forEach(function (b) {
+                  (b.paragraphs || []).forEach(function (par) {
+                    (par.lines || []).forEach(function (ln) {
+                      var text = (ln.text || "").replace(/\s+/g, " ").trim();
+                      if (!text || !ln.bbox) return;
+                      var tl = viewport.convertToPdfPoint(ln.bbox.x0, ln.bbox.y0);
+                      var br = viewport.convertToPdfPoint(ln.bbox.x1, ln.bbox.y1);
+                      var x = Math.min(tl[0], br[0]);
+                      var w = Math.abs(br[0] - tl[0]);
+                      var top = Math.max(tl[1], br[1]);
+                      var bottom = Math.min(tl[1], br[1]);
+                      var h = Math.max(4, top - bottom);
+                      var fsOcr = Math.max(5, Math.round(h * 0.74 * 10) / 10);
+                      /* Papier- und Schriftfarbe der Scan-Zeile aus dem
+                         Bild messen: Wird die Zeile später geändert,
+                         überdeckt der Editor sie im gleichen Papierton
+                         statt mit einem weißen Fleck und schreibt im
+                         gleichen Farbton wie die Scan-Schrift. */
+                      var oc = sampleRegionColors(ctx, ln.bbox.x0 - 3, ln.bbox.y0 - 3, (ln.bbox.x1 - ln.bbox.x0) + 6, (ln.bbox.y1 - ln.bbox.y0) + 6);
+                      var ocrLine = {
+                        text: text, x: x, y: bottom + h * 0.16, w: w, fs: fsOcr,
+                        fontKey: "Helvetica", fam: "sans", bold: false, italic: false,
+                        styleLabel: "Scan · " + ("" + fsOcr).replace(".", ",") + " pt"
+                      };
+                      if (oc) { ocrLine.bg = oc.bg; if (oc.fg) ocrLine.color = oc.fg; }
+                      /* Echte Größe, Fett und Grundlinie aus dem Bild
+                         messen (Tinte statt OCR-Rahmen): Der Rahmen
+                         der OCR enthält Leerraum und keine Stärke –
+                         mit ihm wurde eine fette, große Zeile wie
+                         „Kleyerstraße 92b" dünn und klein neu gesetzt.
+                         Gemessen wird jetzt: Tintenhöhe → Größe,
+                         Strichstärke → fett, Tintenrand → Position. */
+                      var ink = measureInk(ctx, ln.bbox.x0 - 3, ln.bbox.y0 - 3, (ln.bbox.x1 - ln.bbox.x0) + 6, (ln.bbox.y1 - ln.bbox.y0) + 6, oc && oc.bg, oc && oc.fg);
+                      if (ink) {
+                        var ist = inkTextStyle(ink, text, scale);
+                        if (ist) {
+                          ocrLine.fs = ist.fs;
+                          if (ist.bold) { ocrLine.bold = true; ocrLine.fontKey = "HelveticaBold"; }
+                          var inkTl = viewport.convertToPdfPoint(ln.bbox.x0 - 3 + ink.left, ln.bbox.y0 - 3 + ink.top);
+                          var inkBr = viewport.convertToPdfPoint(ln.bbox.x0 - 3 + ink.right + 1, ln.bbox.y0 - 3 + ink.bottom + 1);
+                          ocrLine.x = Math.min(inkTl[0], inkBr[0]);
+                          ocrLine.w = Math.abs(inkBr[0] - inkTl[0]);
+                          ocrLine.y = Math.min(inkTl[1], inkBr[1]) + (ist.hasDesc ? ist.fs * 0.21 : 0);
+                          ocrLine.styleLabel = "Scan · Helvetica" + (ist.bold ? " fett" : "") + " · " + ("" + ist.fs).replace(".", ",") + " pt";
+                        }
+                      }
+                      lines.push(ocrLine);
+                    });
+                  });
+                });
+                ocrCache[key] = lines;
+                return lines;
+              });
+            });
+          }).catch(function (err) {
+            if (window.console) console.warn("OCR-Seite fehlgeschlagen:", err);
+            ocrCache[key] = [];
+            return [];
+          });
+        }
+
+        function ensurePageData(pg) {
+          if (pageTextData[pg.id]) return Promise.resolve(pageTextData[pg.id]);
+          if (pg.fileId === null) {
+            pageTextData[pg.id] = { source: "none", lines: [] };
+            return Promise.resolve(pageTextData[pg.id]);
+          }
+          var key = lineKey(pg);
+          if (ocrCache[key] && ocrCache[key].length) {
+            pageTextData[pg.id] = { source: "ocr", lines: withIds(pg, ocrCache[key]) };
+            return Promise.resolve(pageTextData[pg.id]);
+          }
+          return extractNativeLines(pg).then(function (lines) {
+            var hasText = lines.some(function (l) { return l.text.trim().length >= 2; });
+            pageTextData[pg.id] = { source: hasText ? "native" : "none", lines: withIds(pg, lines) };
+            return pageTextData[pg.id];
+          });
+        }
+
+        function loadAllPageData() {
+          var chain = Promise.resolve();
+          pages.forEach(function (pg) {
+            chain = chain.then(function () { return ensurePageData(pg); });
+          });
+          return chain.then(function () { renderTxPages(); });
+        }
+
+        function pageLabel(idx) {
+          var pg = pages[idx];
+          if (pg.fileId === null) return "Leere Seite";
+          var f = files.get(pg.fileId);
+          return (f ? f.name : "") + " · Seite " + (pg.pageIndex + 1);
+        }
+
+        function renderTxPages() {
+          if (!els.txPages) return;
+          els.txPages.innerHTML = "";
+          var anyText = false;
+          pages.forEach(function (pg, idx) {
+            var data = pageTextData[pg.id];
+            var box = document.createElement("div");
+            box.className = "tx-page";
+            var head = document.createElement("div");
+            head.className = "tx-pagehead";
+            var t = document.createElement("span");
+            t.className = "t"; t.textContent = "Seite " + (idx + 1);
+            head.appendChild(t);
+            var sub = document.createElement("span");
+            sub.className = "sub"; sub.textContent = pageLabel(idx);
+            head.appendChild(sub);
+            var badge = document.createElement("span");
+            if (!data) { badge.className = "tx-src none"; badge.textContent = "Text wird gelesen …"; }
+            else if (data.source === "ocr") { badge.className = "tx-src ocr"; badge.textContent = "OCR-Text erkannt"; }
+            else if (data.source === "native") { badge.className = "tx-src"; badge.textContent = "Text vorhanden"; }
+            else { badge.className = "tx-src none"; badge.textContent = "Kein Text – Scan?"; }
+            head.appendChild(badge);
+            box.appendChild(head);
+            if (data && data.lines.length) {
+              anyText = true;
+              var wrap = document.createElement("div");
+              wrap.className = "tx-lines";
+              data.lines.forEach(function (line) {
+                var isChanged = edits[line.id] !== undefined && edits[line.id] !== line.text;
+                var row = document.createElement("div");
+                row.className = "tx-line";
+                var input = document.createElement("input");
+                input.type = "text";
+                input.value = edits[line.id] !== undefined ? edits[line.id] : line.text;
+                input.setAttribute("aria-label", "Textzeile auf Seite " + (idx + 1));
+                if (isChanged) input.classList.add("changed");
+                /* Das Feld zeigt die Zeile schon in der Schrift des
+                   Originals (Familie, Fett, Kursiv, Farbe), damit man
+                   vor dem Speichern sieht, wie der Ersatz aussehen
+                   wird. */
+                input.style.fontFamily = line.fam === "serif" ? "Georgia, 'Times New Roman', Times, serif"
+                  : line.fam === "mono" ? "'Courier New', Courier, monospace"
+                  : "Helvetica, Arial, sans-serif";
+                if (line.bold) input.style.fontWeight = "700";
+                if (line.italic) input.style.fontStyle = "italic";
+                if (line.color) input.style.color = colorCss(line.color);
+                var undo = document.createElement("button");
+                undo.type = "button";
+                undo.className = "tx-undo";
+                undo.title = "Änderung zurücknehmen";
+                undo.setAttribute("aria-label", "Änderung an dieser Zeile zurücknehmen");
+                undo.innerHTML = UNDO_ICON;
+                undo.hidden = !isChanged;
+                input.addEventListener("input", function () {
+                  if (input.value === line.text) {
+                    delete edits[line.id];
+                    input.classList.remove("changed");
+                    undo.hidden = true;
+                  } else {
+                    edits[line.id] = input.value;
+                    input.classList.add("changed");
+                    undo.hidden = false;
+                  }
+                });
+                undo.addEventListener("click", function () {
+                  delete edits[line.id];
+                  input.value = line.text;
+                  input.classList.remove("changed");
+                  undo.hidden = true;
+                });
+                var chip = document.createElement("span");
+                chip.className = "tx-style";
+                chip.title = "Diese Schrift übernimmt der neue Text: " + (line.styleLabel || "Helvetica")
+                  + (line.color ? ", Textfarbe " + colorCss(line.color) : "");
+                var dot = document.createElement("span");
+                dot.className = "tx-dot";
+                dot.style.background = line.color ? colorCss(line.color) : "#17191d";
+                chip.appendChild(dot);
+                var chipName = document.createElement("span");
+                chipName.className = "tx-style-name";
+                chipName.textContent = line.styleLabel || "";
+                chip.appendChild(chipName);
+                row.appendChild(input);
+                row.appendChild(chip);
+                row.appendChild(undo);
+                wrap.appendChild(row);
+              });
+              box.appendChild(wrap);
+            } else if (data) {
+              var p = document.createElement("p");
+              p.className = "tx-nolines";
+              p.textContent = pg.fileId === null
+                ? "Leere Seite – hier gibt es keinen Text."
+                : "Diese Seite hat keine Textebene. Wenn es ein Scan ist: oben auf „Texterkennung (OCR) starten“ tippen – dann erscheint der erkannte Text hier und die Seite wird durchsuchbar.";
+              box.appendChild(p);
+            }
+            els.txPages.appendChild(box);
+          });
+          els.txDownloadTxt.disabled = !anyText;
+        }
+
+        function runOcr() {
+          if (!pages.length) { toast("Bitte zuerst eine PDF laden.", true); return; }
+          if (ocrBusy) return;
+          ocrBusy = true;
+          els.txOcr.disabled = true;
+          els.txProgress.hidden = false;
+          els.txProgressText.textContent = "Seiten werden geprüft …";
+          loadAllPageData().then(function () {
+            var targets = pages.filter(function (pg) {
+              if (pg.fileId === null) return false;
+              var d = pageTextData[pg.id];
+              return d && d.source !== "native";
+            });
+            if (!targets.length) {
+              txNote("Alle Seiten haben schon eine Textebene – Texterkennung ist nicht nötig. Du kannst unten direkt Text ändern, oben im Suchfeld suchen und dann speichern.");
+              return null;
+            }
+            return ensureTesseract().then(function () {
+              var chain = Promise.resolve();
+              var done = 0, found = 0;
+              targets.forEach(function (pg) {
+                chain = chain.then(function () {
+                  els.txProgressText.textContent = "Texterkennung läuft: Seite " + (pages.indexOf(pg) + 1) + " von " + pages.length + " (Scan " + (done + 1) + " von " + targets.length + ") …";
+                  return ocrPage(pg).then(function (lines) {
+                    done++;
+                    if (lines.length) {
+                      found++;
+                      pageTextData[pg.id] = { source: "ocr", lines: withIds(pg, lines) };
+                    }
+                    renderTxPages();
+                  });
+                });
+              });
+              return chain.then(function () {
+                if (found) {
+                  txNote("Fertig: Auf " + found + " von " + targets.length + " Seiten ohne Text wurde Text erkannt. Er steht unten Zeile für Zeile – du kannst ihn noch ändern. Beim Speichern („PDF herunterladen“) landet er als Textebene in der PDF: danach ist sie durchsuchbar und der Text lässt sich kopieren.");
+                  toast("Texterkennung fertig – " + found + " Seite(n) erkannt.");
+                } else {
+                  txNote("Die Texterkennung ist durchgelaufen, hat aber keinen Text gefunden. Sind die Seiten vielleicht verdreht oder sehr blass? Drehe sie oben im Raster richtig herum und versuche es noch einmal.", true);
+                  toast("Kein Text erkannt.", true);
+                }
+              });
+            });
+          }).catch(function (err) {
+            if (window.console) console.warn("OCR-Fehler:", err);
+            txNote("Die Texterkennung konnte nicht starten. Beim ersten Start lädt sie die OCR mit Sprachdaten (Deutsch + Englisch) aus dem Internet – prüfe die Verbindung und tippe es noch einmal an.", true);
+            toast("Texterkennung konnte nicht laden.", true);
+          }).then(function () {
+            ocrBusy = false;
+            els.txOcr.disabled = false;
+            els.txProgress.hidden = true;
+          });
+        }
+        els.txOcr.addEventListener("click", runOcr);
+
+        function runTxSearch() {
+          var qRaw = els.txSearch.value.trim();
+          var q = qRaw.toLowerCase();
+          if (!q) { els.txSearchBlock.hidden = true; return; }
+          if (!pages.length) { toast("Bitte zuerst eine PDF laden.", true); return; }
+          loadAllPageData().then(function () {
+            els.txSearchResults.innerHTML = "";
+            var total = 0, hitPages = [];
+            pages.forEach(function (pg, idx) {
+              var d = pageTextData[pg.id];
+              if (!d) return;
+              var hits = 0, sample = null;
+              d.lines.forEach(function (line) {
+                var finalText = edits[line.id] !== undefined ? edits[line.id] : line.text;
+                var hay = finalText.toLowerCase(), pos = 0, c = 0;
+                while ((pos = hay.indexOf(q, pos)) !== -1) { c++; pos += q.length; }
+                if (c) { hits += c; if (!sample) sample = finalText; }
+              });
+              if (hits) { total += hits; hitPages.push({ idx: idx, hits: hits, sample: sample }); }
+            });
+            els.txSearchBlock.hidden = false;
+            var head = document.createElement("p");
+            head.style.cssText = "margin:0 0 4px;font-size:14px;color:var(--ink-2)";
+            head.appendChild(document.createTextNode("„" + qRaw + "“ kommt "));
+            var hb = document.createElement("b");
+            hb.style.color = "var(--ink)";
+            hb.textContent = total + " Mal";
+            head.appendChild(hb);
+            head.appendChild(document.createTextNode(" vor:"));
+            els.txSearchResults.appendChild(head);
+            if (!hitPages.length) {
+              var none = document.createElement("p");
+              none.style.cssText = "margin:0;font-size:14px;color:var(--ink-2)";
+              none.textContent = "Auf keiner Seite gefunden. Groß- und Kleinschreibung ist egal. Bei einer gescannten PDF zuerst die Texterkennung (OCR) laufen lassen, sonst ist der Text nur ein Bild.";
+              els.txSearchResults.appendChild(none);
+            } else {
+              var ul = document.createElement("ul");
+              ul.className = "py-hitlist";
+              hitPages.forEach(function (hp) {
+                var li = document.createElement("li");
+                var b = document.createElement("b");
+                b.textContent = "Seite " + (hp.idx + 1);
+                li.appendChild(b);
+                li.appendChild(document.createTextNode(" (" + pageLabel(hp.idx) + "): " + hp.hits + (hp.hits === 1 ? " Treffer" : " Treffer") + " – „" + (hp.sample.length > 60 ? hp.sample.slice(0, 60) + "…" : hp.sample) + "“"));
+                ul.appendChild(li);
+              });
+              els.txSearchResults.appendChild(ul);
+            }
+          });
+        }
+        els.txSearchBtn.addEventListener("click", runTxSearch);
+        els.txSearch.addEventListener("keydown", function (e) {
+          if (e.key === "Enter") { e.preventDefault(); runTxSearch(); }
+        });
+
+        els.txDownloadTxt.addEventListener("click", function () {
+          var out = [];
+          pages.forEach(function (pg, idx) {
+            out.push("===== Seite " + (idx + 1) + " (" + pageLabel(idx) + ") =====");
+            var d = pageTextData[pg.id];
+            if (d && d.lines.length) {
+              d.lines.forEach(function (line) {
+                out.push(edits[line.id] !== undefined ? edits[line.id] : line.text);
+              });
+            } else {
+              out.push("(kein Text – Scan ohne Texterkennung?)");
+            }
+            out.push("");
+          });
+          var blob = new Blob([out.join("\n")], { type: "text/plain;charset=utf-8" });
+          var url = URL.createObjectURL(blob);
+          var a = document.createElement("a");
+          a.href = url;
+          a.download = baseName().replace(/\.pdf$/i, "") + "-text.txt";
+          document.body.appendChild(a);
+          a.click();
+          a.remove();
+          setTimeout(function () { URL.revokeObjectURL(url); }, 4000);
+          toast("Textdatei wird heruntergeladen.");
+        });
+
+        els.btnTxJump.addEventListener("click", function () {
+          if (pages.length) {
+            els.txPanel.scrollIntoView({ behavior: "smooth", block: "start" });
+            loadAllPageData();
+          } else {
+            var strip = els.empty.querySelectorAll(".engine")[1] || els.empty;
+            strip.scrollIntoView({ behavior: "smooth", block: "center" });
+            toast("Lade zuerst eine PDF – dann kannst du Text erkennen, suchen und ändern.");
+          }
+        });
+
+        /* Textebene + Textänderungen in die fertige PDF einarbeiten.
+           Läuft als pdf-lib-Nachbearbeitung über dem Ergebnis der
+           C++-/Reserve-Engine – die Seitenreihenfolge ist 1:1 die von
+           pageList. Schlägt die Nachbearbeitung fehl, wird das
+           unveränderte PDF ausgeliefert statt gar keins. */
+        function pageHasTextWork(pg) {
+          var d = pageTextData[pg.id];
+          if (!d || !d.lines.length) return false;
+          if (d.source === "ocr") return true;
+          return d.lines.some(function (line) {
+            return edits[line.id] !== undefined && edits[line.id] !== line.text;
+          });
+        }
+
+        function applyTextLayer(bytes, pageList) {
+          if (!pageList.some(pageHasTextWork)) return Promise.resolve(bytes);
+          return PDFLib.PDFDocument.load(bytes.slice(0)).then(function (doc) {
+            /* Alle Schriften einbetten, die die geänderten Zeilen
+               brauchen – je Zeile die Standardschrift, die ihrem
+               Original am nächsten kommt (früher wurde alles in
+               Helvetica und Schwarz gesetzt, darum sah geänderter
+               Text fremd aus). */
+            var needed = { Helvetica: true };
+            pageList.forEach(function (pg) {
+              var d = pageTextData[pg.id];
+              if (!d || !d.lines.length) return;
+              d.lines.forEach(function (line) {
+                if (edits[line.id] !== undefined && edits[line.id] !== line.text) {
+                  needed[line.fontKey || "Helvetica"] = true;
+                }
+              });
+            });
+            var fonts = {};
+            var chain = Promise.resolve();
+            Object.keys(needed).forEach(function (k) {
+              chain = chain.then(function () {
+                return doc.embedFont(PDFLib.StandardFonts[k] || PDFLib.StandardFonts.Helvetica).then(function (f) { fonts[k] = f; });
+              });
+            });
+            return chain.then(function () {
+              var white = PDFLib.rgb(1, 1, 1);
+              var black = PDFLib.rgb(0.08, 0.08, 0.08);
+              function rgbOf(c, fallback) {
+                return c && c.length === 3 ? PDFLib.rgb(c[0], c[1], c[2]) : fallback;
+              }
+              pageList.forEach(function (pg, i) {
+                var d = pageTextData[pg.id];
+                if (!d || !d.lines.length) return;
+                var page = doc.getPage(i);
+                d.lines.forEach(function (line) {
+                  var changed = edits[line.id] !== undefined && edits[line.id] !== line.text;
+                  var finalText = changed ? edits[line.id] : line.text;
+                  try {
+                    if (d.source === "ocr" && !changed) {
+                      /* Unsichtbare Textebene über dem Scan: macht die
+                         Seite durchsuchbar, ohne das Bild zu verändern. */
+                      if (finalText && finalText.trim()) {
+                        page.drawText(sanitizeForPdf(finalText), {
+                          x: line.x, y: line.y, size: Math.max(4, line.fs),
+                          font: fonts.Helvetica, opacity: 0
+                        });
+                      }
+                    } else if (changed) {
+                      /* Alte Zeile in der gemessenen Hintergrundfarbe
+                         der Seite überdecken (Papierton des Scans bzw.
+                         Farbe hinter dem Text – kein weißer Fleck) und
+                         den neuen Text in Schrift, Größe und Farbe des
+                         Originals an dieselbe Stelle setzen.
+                         Leer = Zeile löschen. Das Rechteck deckt die
+                         volle Zeilenhöhe ab (Ober- und Unterlängen),
+                         damit keine Reste der alten Zeichen bleiben. */
+                      page.drawRectangle({
+                        x: line.x - line.fs * 0.14, y: line.y - line.fs * 0.34,
+                        width: line.w + line.fs * 0.28, height: line.fs * 1.5,
+                        color: rgbOf(line.bg, white)
+                      });
+                      if (finalText && finalText.trim()) {
+                        var fnt = fonts[line.fontKey || "Helvetica"] || fonts.Helvetica;
+                        var txt = sanitizeForPdf(finalText);
+                        var size = Math.max(4, line.fs);
+                        /* Nur wenn der neue Text sonst über den
+                           Seitenrand liefe, wird er etwas kleiner –
+                           die Originalgröße bleibt sonst unangetastet. */
+                        try {
+                          var avail = page.getWidth() - line.x - 16;
+                          var wNew = fnt.widthOfTextAtSize(txt, size);
+                          if (wNew > avail && avail > 30) size = Math.max(4, size * (avail / wNew));
+                        } catch (e2) { /* Messen ist Zusatz, nie Abbruchgrund */ }
+                        page.drawText(txt, {
+                          x: line.x, y: line.y, size: size,
+                          font: fnt, color: rgbOf(line.color, black)
+                        });
+                      }
+                    }
+                  } catch (e) { /* einzelne Zeile überspringen, Rest bleibt */ }
+                });
+              });
+              return doc.save();
+            });
+          }).catch(function (err) {
+            if (window.console) console.warn("Textebene konnte nicht eingebettet werden:", err);
+            return bytes;
+          });
+        }
+
+        setOcr("idle", "OCR nicht gestartet");
 
         /* ---------------- UI refresh ---------------- */
         function renumber() {
@@ -1737,7 +2881,18 @@ window.__QPDF_WASM_B64__ =
           var has = pages.length > 0 || files.size > 0;
           els.empty.hidden = has;
           els.grid.hidden = !has;
+          els.txPanel.hidden = !has;
           els.statusbar.hidden = !has;
+          if (has) {
+            /* Textdaten neuer Seiten automatisch nachladen; steht der
+               Nutzer gerade in einem Textfeld, wird die Liste nicht
+               unter seinen Fingern neu aufgebaut. */
+            var missing = pages.some(function (pg) { return !pageTextData[pg.id]; });
+            var active = document.activeElement;
+            var typing = active && els.txPanel.contains(active) && active.tagName === "INPUT";
+            if (missing) loadAllPageData();
+            else if (!typing) renderTxPages();
+          }
           if (!has) { els.filebar.classList.remove("show"); els.dlpanel.hidden = true; }
           /* append cards for pages that don't have one yet */
           pages.forEach(function (p) {

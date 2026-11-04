@@ -26,13 +26,19 @@
 <body>
     <input type="file" id="fileInput" accept="application/pdf,.pdf" multiple hidden />
 
-    <header class="toolbar">
+    <header class="toolbar" id="toolbar">
       <div class="toolbar-inner">
         <div class="brand">
           <span class="mark" aria-hidden="true">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M9 15l6-6"/><path d="M9 9h.01"/><path d="M15 15h.01"/></svg>
           </span>
           <span class="name">PDF Editor</span>
+        </div>
+
+        <div class="engmini" id="engMini" aria-label="Engine Status">
+          <span class="engmini-item"><span class="engdot load" data-engdot></span><span data-engtext>C++-Engine lädt …</span></span>
+          <span class="engmini-item"><span class="engdot" data-rustdot></span><span data-rusttext>Rust nicht gestartet</span></span>
+          <span class="engmini-item"><span class="engdot" data-ocrdot></span><span data-ocrtext>OCR nicht gestartet</span></span>
         </div>
 
         <div class="tgroup">
@@ -96,6 +102,43 @@
     </div>
 
     <main>
+      <section id="homeView" aria-label="Funktion wählen">
+        <h1>Was möchtest du machen?</h1>
+        <p class="home-sub">Tippe auf eine Funktion. Du siehst danach nur diese eine Funktion – nichts anderes gemischt.</p>
+        <div class="home-grid">
+          <button class="home-card" type="button" data-goto="pages">
+            <span class="home-ic" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M9 15l6-6"/><path d="M9 9h.01"/><path d="M15 15h.01"/></svg>
+            </span>
+            <span class="home-title">Seiten bearbeiten</span>
+            <span class="home-desc">Seiten löschen, drehen und umsortieren. Mehrere PDFs laden und zu einer Datei zusammenführen.</span>
+          </button>
+          <button class="home-card" type="button" data-goto="rust">
+            <span class="home-ic" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m7 10 5 5 5-5"/><path d="M12 15V3"/></svg>
+            </span>
+            <span class="home-title">PDF verkleinern</span>
+            <span class="home-desc">Mit der Rust-Engine: Metadaten und ungenutzte Teile entfernen, neu komprimieren – Seiten und Text bleiben gleich.</span>
+          </button>
+          <button class="home-card" type="button" data-goto="ocr">
+            <span class="home-ic" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v3"/><path d="M16 3h3a2 2 0 0 1 2 2v3"/><path d="M8 21H5a2 2 0 0 1-2-2v-3"/><path d="M16 21h3a2 2 0 0 0 2-2v-3"/><path d="M7 12h10"/></svg>
+            </span>
+            <span class="home-title">Text &amp; OCR</span>
+            <span class="home-desc">Scan lesbar und durchsuchbar machen, Text suchen und Zeile für Zeile ändern.</span>
+          </button>
+        </div>
+        <p class="home-loaded" id="homeLoaded" hidden></p>
+        <p class="home-note">Deine PDF bleibt geladen, wenn du zwischen den Funktionen wechselst – du musst sie nicht neu hochladen.</p>
+      </section>
+
+      <div class="viewbar" id="viewbar" hidden>
+        <button class="tbtn" id="btnHome" type="button">← Zurück zur Auswahl</button>
+        <button class="tbtn" id="btnOther" type="button">Andere Funktion</button>
+        <span class="view-title" id="viewTitle"></span>
+        <label class="tbtn" id="btnAddInView" for="fileInput" tabindex="0" role="button">PDF hinzufügen</label>
+      </div>
+
       <section id="emptyState">
         <div class="dropzone" id="dropzone">
           <div class="big-ic" aria-hidden="true">

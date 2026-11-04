@@ -134,6 +134,12 @@
           btnTxJump: document.getElementById("btnTxJump"),
           txPanel: document.getElementById("txPanel"),
           rsPanel: document.getElementById("rsPanel"),
+          homeView: document.getElementById("homeView"),
+          homeLoaded: document.getElementById("homeLoaded"),
+          viewbar: document.getElementById("viewbar"),
+          viewTitle: document.getElementById("viewTitle"),
+          btnHome: document.getElementById("btnHome"),
+          btnOther: document.getElementById("btnOther"),
           rsOptimize: document.getElementById("rsOptimize"),
           rsInfo: document.getElementById("rsInfo"),
           rsResult: document.getElementById("rsResult"),
@@ -1778,14 +1784,52 @@
         });
 
         els.btnTxJump.addEventListener("click", function () {
-          if (pages.length) {
-            els.txPanel.scrollIntoView({ behavior: "smooth", block: "start" });
-            loadAllPageData();
+          showView("ocr");
+        });
+
+        /* ---- Start-Auswahl: nur eine Funktion zur Zeit ----
+           currentView: "home" | "pages" | "ocr" | "rust". Der Wechsel
+           blendet nur Bereiche ein/aus – die geladenen Dateien und
+           Seiten (files, pages) bleiben im Speicher und gehen beim
+           Wechsel nicht verloren. OCR und Rust laden weiter erst auf
+           Knopfdruck in ihrer eigenen Funktion. */
+        var currentView = "home";
+        var VIEW_TITLES = { pages: "Seiten bearbeiten", ocr: "Text & OCR", rust: "PDF verkleinern (Rust)" };
+        function applyView() {
+          var has = pages.length > 0 || files.size > 0;
+          document.body.dataset.view = currentView;
+          els.homeView.hidden = currentView !== "home";
+          els.viewbar.hidden = currentView === "home";
+          els.viewTitle.textContent = VIEW_TITLES[currentView] || "";
+          els.empty.hidden = !(currentView === "pages" && !has);
+          els.grid.hidden = !(currentView === "pages" && has);
+          els.txPanel.hidden = currentView !== "ocr";
+          els.rsPanel.hidden = currentView !== "rust";
+          els.statusbar.hidden = !(currentView !== "home" && has);
+          if (has) {
+            els.homeLoaded.hidden = false;
+            els.homeLoaded.textContent = "Geladen: " + files.size + (files.size === 1 ? " Datei, " : " Dateien, ") + pages.length + (pages.length === 1 ? " Seite" : " Seiten") + " – bleibt beim Wechsel erhalten.";
           } else {
-            var strip = els.empty.querySelectorAll(".engine")[1] || els.empty;
-            strip.scrollIntoView({ behavior: "smooth", block: "center" });
-            toast("Lade zuerst eine PDF – dann kannst du Text erkennen, suchen und ändern.");
+            els.homeLoaded.hidden = true;
           }
+          if (currentView === "home") els.dlpanel.hidden = true;
+        }
+        function showView(view) {
+          currentView = view;
+          applyView();
+          if (view === "ocr" && pages.length) loadAllPageData();
+          window.scrollTo(0, 0);
+        }
+        document.querySelectorAll("[data-goto]").forEach(function (btn) {
+          btn.addEventListener("click", function () { showView(btn.getAttribute("data-goto")); });
+        });
+        els.btnHome.addEventListener("click", function () { showView("home"); });
+        els.btnOther.addEventListener("click", function () { showView("home"); });
+        /* Das Label "PDF hinzufügen" in der Funktions-Leiste ist ein
+           <label for="fileInput"> und öffnet die Auswahl nativ; für
+           die Tastatur zusätzlich per Enter/Leertaste. */
+        document.getElementById("btnAddInView").addEventListener("keydown", function (e) {
+          if (e.key === "Enter" || e.key === " ") { e.preventDefault(); openPicker(); }
         });
 
         /* Textebene + Textänderungen in die fertige PDF einarbeiten.
@@ -1933,15 +1977,11 @@
             chip.appendChild(nm); chip.appendChild(ct); chip.appendChild(rm);
             els.chips.appendChild(chip);
           });
-          els.filebar.classList.toggle("show", files.size > 0);
+          els.filebar.classList.toggle("show", files.size > 0 && currentView !== "home");
         }
         function refresh() {
           var has = pages.length > 0 || files.size > 0;
-          els.empty.hidden = has;
-          els.grid.hidden = !has;
-          els.txPanel.hidden = !has;
-          els.rsPanel.hidden = !has;
-          els.statusbar.hidden = !has;
+          applyView();
           if (has) {
             /* Textdaten neuer Seiten automatisch nachladen; steht der
                Nutzer gerade in einem Textfeld, wird die Liste nicht

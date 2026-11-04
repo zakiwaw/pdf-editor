@@ -138,6 +138,15 @@
         </div>
 
         <div class="engine">
+          <div class="eic" aria-hidden="true" style="font-family:inherit;font-size:19px;font-weight:800">Rs</div>
+          <div class="etxt">
+            <h2>Neu dazu: eine Rust-Engine zum Verkleinern</h2>
+            <p>Zusätzlich zur C++-Engine gibt es jetzt <b>Rust (lopdf)</b> als WebAssembly: Sie macht das fertige PDF <b>kleiner</b>, indem sie Metadaten und ungenutzte Objekte entfernt und die Daten neu komprimiert. Sie startet erst auf Knopfdruck im Bereich „Rust – PDF verkleinern“ unten, damit die Seite schnell bleibt. Wenn Rust einmal nicht lädt, läuft alles weiter wie bisher mit C++.</p>
+          </div>
+          <span class="engstat"><span class="engdot" data-rustdot></span><span data-rusttext>Rust nicht gestartet</span></span>
+        </div>
+
+        <div class="engine">
           <div class="eic" aria-hidden="true" style="font-family:inherit;font-size:19px;font-weight:800">Aa</div>
           <div class="etxt">
             <h2>Scans lesbar machen: Texterkennung (OCR) &amp; Text ändern</h2>
@@ -195,6 +204,22 @@
 
         <h3>Text je Seite – Zeilen antippen und ändern</h3>
         <div id="txPages"></div>
+      </section>
+
+<section class="py-panel" id="rsPanel" hidden aria-label="Rust PDF verkleinern">
+        <div class="py-head">
+          <div class="tx-badge" aria-hidden="true">Rs</div>
+          <div class="ptxt">
+            <h2>Rust – PDF verkleinern</h2>
+            <p>Die <b>Rust-Engine (lopdf)</b> nimmt das fertige PDF und macht es kleiner: Sie entfernt <b>Metadaten</b>, löscht <b>ungenutzte Objekte</b> und <b>komprimiert die Datenströme neu</b>. Die Seiten und der Text bleiben genau gleich. Alles läuft auf deinem Gerät, kein Upload. Rust lädt erst, wenn du unten tippst, damit die Seite schnell bleibt. Hinweis: Passwort-Schutz kann diese Rust-Version nicht – die lopdf-Bibliothek kann verschlüsselte PDFs nur lesen, nicht mit Passwort speichern.</p>
+          </div>
+          <span class="pystat"><span class="engdot" data-rustdot></span><span data-rusttext>Rust nicht gestartet</span></span>
+        </div>
+        <div class="py-controls">
+          <button class="py-btn primary" id="rsOptimize" type="button">Mit Rust verkleinern</button>
+          <button class="py-btn" id="rsInfo" type="button">PDF-Infos mit Rust lesen</button>
+        </div>
+        <div class="py-note" id="rsResult">Noch nichts verkleinert. Lade eine PDF, dann tippe auf „Mit Rust verkleinern“ – danach siehst du hier die Größe vorher und nachher.</div>
       </section>
 
 <section class="grid" id="grid" hidden aria-label="Seiten"></section>

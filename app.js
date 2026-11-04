@@ -133,6 +133,10 @@
           dlClose: document.getElementById("dlClose"),
           btnTxJump: document.getElementById("btnTxJump"),
           txPanel: document.getElementById("txPanel"),
+          rsPanel: document.getElementById("rsPanel"),
+          rsOptimize: document.getElementById("rsOptimize"),
+          rsInfo: document.getElementById("rsInfo"),
+          rsResult: document.getElementById("rsResult"),
           txOcr: document.getElementById("txOcr"),
           txSearch: document.getElementById("txSearch"),
           txSearchBtn: document.getElementById("txSearchBtn"),
@@ -882,6 +886,118 @@
             setBusy(false);
             els.btnExtract.disabled = false;
             toast("Fehler beim Erstellen der PDF.", true);
+          });
+        });
+
+        /* ---------------- Rust-Engine (lopdf, WebAssembly): PDF verkleinern ----------------
+           Rust laeuft ZUSAETZLICH zur C++-Engine, ersetzt sie nicht.
+           Das Modul wird erst auf Knopfdruck geladen (dynamic import),
+           damit die Seite schnell bleibt. Laedt Rust nicht, bleibt die
+           Seite voll funktionsfaehig mit C++ (sichtbare Meldung).
+           Echte Funktion (lopdf 0.35): Metadaten entfernen, ungenutzte
+           Objekte entfernen, Streams neu komprimieren, neu speichern.
+           Kein Passwort-Schutz: lopdf kann verschluesselte PDFs nur lesen,
+           es gibt keine API zum Verschluesseln beim Speichern. */
+        var rustMod = null;
+        var rustLoad = null;
+        var rustState = "idle";
+        function setRust(state, label) {
+          rustState = state;
+          var dotCls = state === "ready" ? "engdot ok" : (state === "error" ? "engdot fb" : (state === "loading" ? "engdot load" : "engdot"));
+          document.querySelectorAll("[data-rustdot]").forEach(function (d) { d.className = dotCls; });
+          document.querySelectorAll("[data-rusttext]").forEach(function (t) { t.textContent = label; });
+        }
+        function loadRust() {
+          if (rustMod) return Promise.resolve(rustMod);
+          if (rustLoad) return rustLoad;
+          setRust("loading", "Rust lädt …");
+          rustLoad = import("./vendor/rust_pdf.js").then(function (m) {
+            return m.default().then(function () {
+              rustMod = m;
+              setRust("ready", "Rust bereit (lopdf)");
+              return m;
+            });
+          }).catch(function (err) {
+            rustLoad = null;
+            setRust("error", "Rust nicht verfügbar, C++ läuft weiter");
+            if (window.console) console.warn("Rust-Engine konnte nicht geladen werden:", err);
+            return null;
+          });
+          return rustLoad;
+        }
+        function rsNote(msg, isErr) {
+          els.rsResult.textContent = msg;
+          els.rsResult.className = "py-note" + (isErr ? " err" : "");
+        }
+        function rsSmallName() {
+          var n = baseName();
+          if (/-bearbeitet\.pdf$/i.test(n)) return n.replace(/-bearbeitet\.pdf$/i, "-klein.pdf");
+          return n.replace(/\.pdf$/i, "-klein.pdf");
+        }
+        els.rsOptimize.addEventListener("click", function () {
+          if (!pages.length) return;
+          els.dlpanel.hidden = true;
+          els.rsOptimize.disabled = true;
+          setBusy(true, "Rust verkleinert die PDF …");
+          buildPdf(pages).then(function (bytes) {
+            return applyTextLayer(bytes, pages);
+          }).then(function (bytes) {
+            var before = bytes.length;
+            return loadRust().then(function (m) {
+              if (!m) throw new Error("rust-unavailable");
+              var out = m.optimize_pdf(bytes);
+              var after = out.length;
+              var savedPct = (100 * (1 - after / before)).toFixed(1).replace(".", ",");
+              var info = "";
+              try { info = JSON.parse(m.pdf_info(out)); } catch (e) {}
+              var line = "Vorher " + fmtSize(before) + " · Nachher " + fmtSize(after) +
+                (after < before ? " · gespart " + savedPct + " %" : " · keine Ersparnis, die PDF war schon optimal") +
+                (info && info.pages ? " · " + info.pages + " Seiten, Text und Seiten unverändert" : "");
+              rsNote(line);
+              setBusy(false);
+              els.rsOptimize.disabled = false;
+              if (after < before) {
+                presentDownload(out, rsSmallName());
+                toast("Rust: PDF verkleinert – " + savedPct + " % gespart.");
+              } else {
+                toast("Rust: Die PDF war schon optimal, keine Ersparnis.");
+              }
+            });
+          }).catch(function (err) {
+            setBusy(false);
+            els.rsOptimize.disabled = false;
+            if (err && err.message === "rust-unavailable") {
+              rsNote("Rust konnte nicht geladen werden. Die C++-Engine läuft weiter – lade die PDF einfach oben über „PDF herunterladen“.", true);
+              toast("Rust nicht verfügbar, C++ läuft weiter.", true);
+            } else {
+              rsNote("Fehler beim Verkleinern mit Rust.", true);
+              toast("Fehler beim Verkleinern mit Rust.", true);
+            }
+          });
+        });
+        els.rsInfo.addEventListener("click", function () {
+          if (!pages.length) return;
+          els.rsInfo.disabled = true;
+          setBusy(true, "Rust liest die PDF-Infos …");
+          buildPdf(pages).then(function (bytes) {
+            return applyTextLayer(bytes, pages);
+          }).then(function (bytes) {
+            return loadRust().then(function (m) {
+              if (!m) throw new Error("rust-unavailable");
+              var info = JSON.parse(m.pdf_info(bytes));
+              rsNote("Rust liest: " + info.pages + " Seiten · " + info.objects + " Objekte · PDF " + info.version +
+                " · verschlüsselt: " + (info.encrypted ? "ja" : "nein") + " · Größe " + fmtSize(bytes.length) + ".");
+              setBusy(false);
+              els.rsInfo.disabled = false;
+            });
+          }).catch(function (err) {
+            setBusy(false);
+            els.rsInfo.disabled = false;
+            if (err && err.message === "rust-unavailable") {
+              rsNote("Rust konnte nicht geladen werden. Die C++-Engine läuft weiter.", true);
+            } else {
+              rsNote("Fehler beim Lesen der PDF-Infos mit Rust.", true);
+            }
           });
         });
 
@@ -1824,6 +1940,7 @@
           els.empty.hidden = has;
           els.grid.hidden = !has;
           els.txPanel.hidden = !has;
+          els.rsPanel.hidden = !has;
           els.statusbar.hidden = !has;
           if (has) {
             /* Textdaten neuer Seiten automatisch nachladen; steht der

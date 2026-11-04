@@ -19,3 +19,15 @@ Online: https://zakiwaw.github.io/pdf-editor/
 
 Tesseract.js (OCR, Deutsch + Englisch) wird nur auf Knopfdruck per CDN
 geladen, sonst ist die Seite offline nutzbar.
+
+## Rust-Engine (lopdf, WebAssembly) – neu seit 04.11.2026
+
+Zusätzlich zur C++-Engine (QPDF) gibt es Rust (lopdf 0.35) als WebAssembly:
+- Dateien: `vendor/rust_pdf.js` (wasm-bindgen Glue, 7 KB) + `vendor/rust_pdf.wasm` (634 KB)
+- Rust-Projekt: `workspace/pdf-editor-rust/` (Cargo.toml, src/lib.rs, pkg/ als Build-Ausgabe)
+- Echte Funktion: PDF verkleinern – Metadaten entfernen, ungenutzte Objekte
+  entfernen, Streams neu komprimieren, neu speichern. Bereich
+  „Rust – PDF verkleinern“ auf der Seite, lädt erst auf Knopfdruck.
+- Kein Passwort-Schutz: lopdf 0.35 kann verschlüsselte PDFs nur lesen,
+  es gibt keine API zum Verschlüsseln beim Speichern.
+- Fällt Rust aus, läuft die Seite weiter normal mit C++.

@@ -354,7 +354,8 @@
             var f = files.get(pg.fileId);
             fn.textContent = f ? f.name : "";
             fn.title = fn.textContent;
-            pn.textContent = "Seite " + (pg.pageIndex + 1) + " von " + (f ? f.pageCount : "?");
+            var fp0 = filePagePos(pg);
+            pn.textContent = "Seite " + fp0.pos + " von " + fp0.total;
           }
           meta.appendChild(fn); meta.appendChild(pn);
           card.appendChild(meta);
@@ -1940,10 +1941,23 @@
         setOcr("idle", "OCR nicht gestartet");
 
         /* ---------------- UI refresh ---------------- */
+        /* Position einer Seite innerhalb ihrer Datei, nach aktuellem
+           Stand (nach Löschen/Sortieren) – nicht die ursprüngliche
+           Seitenzahl der Quelldatei. */
+        function filePagePos(pg) {
+          var fps = pages.filter(function (p) { return p.fileId === pg.fileId; });
+          return { pos: fps.indexOf(pg) + 1, total: fps.length };
+        }
         function renumber() {
           pages.forEach(function (p, i) {
             var c = cardEl(p.id);
-            if (c) c.querySelector(".pos").textContent = i + 1;
+            if (!c) return;
+            c.querySelector(".pos").textContent = i + 1;
+            if (p.fileId !== null) {
+              var fp = filePagePos(p);
+              var pn = c.querySelector(".pn");
+              if (pn) pn.textContent = "Seite " + fp.pos + " von " + fp.total;
+            }
           });
         }
         function refreshStats() {
@@ -1968,7 +1982,8 @@
             var chip = document.createElement("span");
             chip.className = "chip";
             var nm = document.createElement("span"); nm.className = "nm"; nm.textContent = f.name; nm.title = f.name;
-            var ct = document.createElement("span"); ct.className = "ct"; ct.textContent = f.pageCount + (f.pageCount === 1 ? " Seite" : " Seiten");
+            var n = pages.filter(function (p) { return p.fileId === f.id; }).length;
+            var ct = document.createElement("span"); ct.className = "ct"; ct.textContent = n + (n === 1 ? " Seite" : " Seiten");
             var rm = document.createElement("button");
             rm.type = "button"; rm.innerHTML = ICONS.x;
             rm.setAttribute("aria-label", f.name + " entfernen");

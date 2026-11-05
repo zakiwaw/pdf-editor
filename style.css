@@ -577,6 +577,11 @@
       body[data-view="home"] .toolbar .tsep,
       body[data-view="home"] .toolbar #btnTxJump,
       body[data-view="home"] .toolbar #btnDownload { display: none; }
+      /* Werkzeugleiste nur in „Seiten bearbeiten" – auf der Startauswahl
+         und in „PDF verkleinern" / „Text & OCR" bleibt sie verborgen. */
+      body[data-view="home"] .toolbar,
+      body[data-view="ocr"] .toolbar,
+      body[data-view="rust"] .toolbar { display: none; }
       #homeView { max-width: 860px; margin: 0 auto; padding: 34px 16px 48px; text-align: center; }
       #homeView h1 { margin: 0 0 8px; font-size: 28px; font-weight: 800; letter-spacing: -.02em; }
       .home-sub { margin: 0 0 26px; font-size: 15px; line-height: 1.6; color: var(--ink-2); }
